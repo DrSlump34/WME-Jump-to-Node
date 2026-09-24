@@ -9,7 +9,7 @@
 // @name:he      WME Jump to Node
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgdmlld0JveD0nMCAwIDY0IDY0Jz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9J2cnIHgxPScwJyB5MT0nMCcgeDI9JzEnIHkyPScxJz48c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMxZTg4ZTUnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyMxNTY1YzAnLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0nNjQnIGhlaWdodD0nNjQnIHJ4PScxNCcgZmlsbD0ndXJsKCNnKScvPjxwYXRoIGQ9J005IDQ3IEgzOScgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxjaXJjbGUgY3g9JzknIGN5PSc0Nycgcj0nNScgZmlsbD0nI2ZmZicvPjxjaXJjbGUgY3g9JzQ1JyBjeT0nNDcnIHI9JzcnIGZpbGw9JyNmYjhjMDAnIHN0cm9rZT0nI2ZmZicgc3Ryb2tlLXdpZHRoPSczJy8+PHBhdGggZD0nTTEzIDMzIEMxOCAxMiAzOCAxMCA0NCAzMCcgZmlsbD0nbm9uZScgc3Ryb2tlPScjZmZmZmZmJyBzdHJva2Utd2lkdGg9JzMuNScgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtZGFzaGFycmF5PScxIDcnLz48cGF0aCBkPSdNMzYgMjcgTDQ1IDM3IEw1MCAyNCBaJyBmaWxsPScjZmZmJy8+PC9zdmc+Cg==
 // @namespace    https://github.com/DrSlump34
-// @version      0.04.00
+// @version      0.05.00
 // @description  Jump to either end of the selected segment, to its middle, or fit it on screen — from the segment panel, from a small toolbar that appears when you hover the selection, or by keyboard. A Back button returns you where you were.
 // @description:fr Sauter à l'une ou l'autre extrémité du segment sélectionné, à son milieu, ou l'afficher en entier — depuis le panneau du segment, depuis une petite barre qui apparaît au survol de la sélection, ou au clavier. Un bouton Revenir vous ramène d'où vous veniez.
 // @description:de Springen Sie zu einem Ende des ausgewählten Segments, zu seiner Mitte, oder zeigen Sie es ganz an — über den Segmentbereich, über eine kleine Leiste, die beim Überfahren der Auswahl erscheint, oder per Tastatur. Eine Zurück-Schaltfläche bringt Sie zurück.
@@ -21,6 +21,10 @@
 // @author       DrSlump34
 // @copyright    DrSlump34 2026
 // @license      MIT
+// @homepageURL  https://github.com/DrSlump34/WME-Jump-to-Node
+// @supportURL   https://www.waze.com/discuss/t/script-wme-jump-to-node/412995
+// @downloadURL  https://update.greasyfork.org/scripts/597298/WME%20Jump%20to%20Node.user.js
+// @updateURL    https://update.greasyfork.org/scripts/597298/WME%20Jump%20to%20Node.meta.js
 // @match        https://www.waze.com/*/editor*
 // @match        https://www.waze.com/editor*
 // @match        https://beta.waze.com/*/editor*
@@ -53,6 +57,8 @@
     const FLASH_LAYER = 'wjn-flash';
     const FLASH_MS = 1600;
     const OPTS_KEY = 'wjn.opts';
+    const URL_GF = 'https://greasyfork.org/scripts/597298-wme-jump-to-node';
+    const URL_DISCUSS = 'https://www.waze.com/discuss/t/script-wme-jump-to-node/412995';
 
     // Survol : la barre n'apparaît que si le pointeur S'ARRÊTE sur la sélection (intention de
     // survol), pour ne pas clignoter à chaque passage ; elle tolère un bref écart pour qu'on
@@ -105,6 +111,7 @@
             hKeysT: 'Keyboard',
             hKeysB: '<p>Five shortcuts are listed <b>without keys</b> under Settings › Keyboard shortcuts, so as not to take any from another script. Assign the ones you want there.</p>',
             hSafeB: 'The script never changes the map: nothing enters the undo stack.',
+            lnkDiscuss: 'Discuss thread',
         },
         fr: {
             lblNode: 'Nœud',
@@ -135,6 +142,7 @@
             hKeysT: 'Clavier',
             hKeysB: '<p>Cinq raccourcis sont listés <b>sans touches</b> dans Paramètres › Raccourcis clavier, pour n\'en prendre aucune à un autre script. Attribuez-y ceux que vous voulez.</p>',
             hSafeB: 'Le script ne modifie jamais la carte : rien n\'entre dans la pile d\'annulation.',
+            lnkDiscuss: 'Fil Discuss',
         },
         de: {
             lblNode: 'Knoten',
@@ -165,6 +173,7 @@
             hKeysT: 'Tastatur',
             hKeysB: '<p>Fünf Tastenkürzel stehen <b>ohne Tasten</b> unter Einstellungen › Tastenkürzel, um keinem anderen Skript eine wegzunehmen. Dort nach Wunsch belegen.</p>',
             hSafeB: 'Das Skript ändert die Karte nie: nichts gelangt in den Rückgängig-Verlauf.',
+            lnkDiscuss: 'Discuss-Thread',
         },
         es: {
             lblNode: 'Nodo',
@@ -195,6 +204,7 @@
             hKeysT: 'Teclado',
             hKeysB: '<p>Cinco atajos aparecen <b>sin teclas</b> en Ajustes › Atajos de teclado, para no quitarle ninguna a otro script. Asigne allí los que quiera.</p>',
             hSafeB: 'El script nunca modifica el mapa: nada entra en el historial de deshacer.',
+            lnkDiscuss: 'Hilo en Discuss',
         },
         it: {
             lblNode: 'Nodo',
@@ -225,6 +235,7 @@
             hKeysT: 'Tastiera',
             hKeysB: '<p>Cinque scorciatoie sono elencate <b>senza tasti</b> in Impostazioni › Scorciatoie da tastiera, per non toglierne a un altro script. Assegnate lì quelle che volete.</p>',
             hSafeB: 'Lo script non modifica mai la mappa: nulla entra nella cronologia di annullamento.',
+            lnkDiscuss: 'Discussione su Discuss',
         },
         'pt-BR': {
             lblNode: 'Nó',
@@ -255,6 +266,7 @@
             hKeysT: 'Teclado',
             hKeysB: '<p>Cinco atalhos aparecem <b>sem teclas</b> em Configurações › Atalhos de teclado, para não tirar nenhuma de outro script. Atribua lá os que quiser.</p>',
             hSafeB: 'O script nunca altera o mapa: nada entra no histórico de desfazer.',
+            lnkDiscuss: 'Tópico no Discuss',
         },
         'pt-PT': {
             lblNode: 'Nó',
@@ -285,6 +297,7 @@
             hKeysT: 'Teclado',
             hKeysB: '<p>Cinco atalhos aparecem <b>sem teclas</b> em Definições › Atalhos de teclado, para não tirar nenhuma a outro script. Atribua lá os que quiser.</p>',
             hSafeB: 'O script nunca altera o mapa: nada entra no histórico de anular.',
+            lnkDiscuss: 'Tópico no Discuss',
         },
         he: {
             lblNode: 'צומת',
@@ -315,6 +328,7 @@
             hKeysT: 'מקלדת',
             hKeysB: '<p>חמישה קיצורים מופיעים <b>ללא מקשים</b> בהגדרות › קיצורי מקלדת, כדי לא לקחת מקש מסקריפט אחר. הקצו שם את אלה שתרצו.</p>',
             hSafeB: 'הסקריפט לעולם אינו משנה את המפה: דבר אינו נכנס להיסטוריית הביטול.',
+            lnkDiscuss: 'שרשור ב-Discuss',
         },
     };
 
@@ -603,7 +617,9 @@
     border: 1px solid var(--wjn-border); border-bottom-width: 2px; border-radius: 3px;
     padding: 0 4px; font-family: ui-monospace,Menlo,Consolas,monospace; font-size: 10px; line-height: 1.5;
 }
-.wjn-sb-foot { margin-top: 12px; font-size: 11px; color: var(--wjn-grey); line-height: 1.6; }
+.wjn-sb-links { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--wjn-border); font-size: 11px; color: var(--wjn-text2); text-align: center; }
+.wjn-sb-links a { color: var(--wjn-blue); }
+.wjn-sb-foot { margin-top: 10px; font-size: 11px; color: var(--wjn-grey); line-height: 1.6; }
 `;
 
     // =====================================================================
@@ -796,8 +812,9 @@
         try { vue = sdk.Map.getMapViewportElement(); } catch (e) { log('survol : ' + e.message); return; }
         let prevu = null;
         vue.addEventListener('mousemove', ev => {
+            // Un setTimeout et non requestAnimationFrame, suspendu dans un onglet en arrière-plan.
             if (prevu) return;
-            prevu = requestAnimationFrame(() => { prevu = null; surMouvement(ev); });
+            prevu = setTimeout(() => { prevu = null; surMouvement(ev); }, 16);
         });
         vue.addEventListener('mousedown', () => { boutonEnfonce = true; cacherPop(); });
         window.addEventListener('mouseup', () => { boutonEnfonce = false; });
@@ -839,6 +856,7 @@
         <button type="button" class="wjn-help-hdr${i === 0 ? ' on' : ''}" data-aide="${s.id}" aria-expanded="${i === 0}">${t(s.t)} <span>${i === 0 ? '&#x25BC;' : '&#x25B6;'}</span></button>
         <div class="wjn-help-body" data-corps="${s.id}"${i === 0 ? '' : ' hidden'}>${t(s.b)}</div>
     </div>`).join('')}
+    <div class="wjn-sb-links">&#x1F4AC; <a href="${URL_DISCUSS}" target="_blank" rel="noopener">${t('lnkDiscuss')}</a> &nbsp;&#xB7;&nbsp; &#x1F517; <a href="${URL_GF}" target="_blank" rel="noopener">GreasyFork</a></div>
     <p class="wjn-sb-foot">&#x1F512; ${t('hSafeB')}</p>
 </div>`;
 
