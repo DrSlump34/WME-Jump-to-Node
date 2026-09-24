@@ -9,7 +9,7 @@
 // @name:he      WME Jump to Node
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgdmlld0JveD0nMCAwIDY0IDY0Jz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9J2cnIHgxPScwJyB5MT0nMCcgeDI9JzEnIHkyPScxJz48c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMxZTg4ZTUnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyMxNTY1YzAnLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0nNjQnIGhlaWdodD0nNjQnIHJ4PScxNCcgZmlsbD0ndXJsKCNnKScvPjxwYXRoIGQ9J005IDQ3IEgzOScgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxjaXJjbGUgY3g9JzknIGN5PSc0Nycgcj0nNScgZmlsbD0nI2ZmZicvPjxjaXJjbGUgY3g9JzQ1JyBjeT0nNDcnIHI9JzcnIGZpbGw9JyNmYjhjMDAnIHN0cm9rZT0nI2ZmZicgc3Ryb2tlLXdpZHRoPSczJy8+PHBhdGggZD0nTTEzIDMzIEMxOCAxMiAzOCAxMCA0NCAzMCcgZmlsbD0nbm9uZScgc3Ryb2tlPScjZmZmZmZmJyBzdHJva2Utd2lkdGg9JzMuNScgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtZGFzaGFycmF5PScxIDcnLz48cGF0aCBkPSdNMzYgMjcgTDQ1IDM3IEw1MCAyNCBaJyBmaWxsPScjZmZmJy8+PC9zdmc+Cg==
 // @namespace    https://github.com/DrSlump34
-// @version      0.03.03
+// @version      0.04.00
 // @description  Jump to either end of the selected segment, to its middle, or fit it on screen — from the segment panel, from a small toolbar that appears when you hover the selection, or by keyboard. A Back button returns you where you were.
 // @description:fr Sauter à l'une ou l'autre extrémité du segment sélectionné, à son milieu, ou l'afficher en entier — depuis le panneau du segment, depuis une petite barre qui apparaît au survol de la sélection, ou au clavier. Un bouton Revenir vous ramène d'où vous veniez.
 // @description:de Springen Sie zu einem Ende des ausgewählten Segments, zu seiner Mitte, oder zeigen Sie es ganz an — über den Segmentbereich, über eine kleine Leiste, die beim Überfahren der Auswahl erscheint, oder per Tastatur. Eine Zurück-Schaltfläche bringt Sie zurück.
@@ -86,6 +86,7 @@
             tipMid: 'Middle: center the map on the middle of the selection',
             tipBack: 'Back: return to where you were before',
             tipBackNone: 'Back: nothing to return to yet',
+            tipLen: (m, n) => n === 1 ? 'Length of the selected segment: ' + m : 'Total length of the ' + n + ' selected segments: ' + m,
             scA: 'Jump to node A (or first end of the selected chain)',
             scB: 'Jump to node B (or other end of the selected chain)',
             scFit: 'Fit the selected segments on screen',
@@ -96,7 +97,7 @@
             sbHoverHint: 'Rest the pointer on a selected segment: the toolbar appears next to it.',
             sbHelp: 'Help',
             hPanelT: 'The buttons',
-            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Center the map on node A or node B of the selected segment. Zoom is kept.</td></tr><tr><td><b>&#x26F6;</b></td><td>Zoom so the whole selection fits on screen.</td></tr><tr><td><b>&#x25CE;</b></td><td>Center on the middle, measured along the road.</td></tr><tr><td><b>&#x21A9;</b></td><td>Back to the view before the FIRST move: A, then B, then back brings you home.</td></tr></table>',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Center the map on node A or node B of the selected segment. Zoom is kept.</td></tr><tr><td><b>&#x26F6;</b></td><td>Zoom so the whole selection fits on screen.</td></tr><tr><td><b>&#x25CE;</b></td><td>Center on the middle, measured along the road.</td></tr><tr><td><b>&#x21A9;</b></td><td>Back to the view before the FIRST move: A, then B, then back brings you home.</td></tr><tr><td><b>km</b></td><td>Length of the selection (the total for several segments) — the same figure as at the bottom of the panel.</td></tr></table>',
             hHoverT: 'On hover',
             hHoverB: '<p>Rest the pointer on a selected segment for a moment: the same buttons appear next to it. Click, move away, move the map or press <kbd>Esc</kbd> to close them.</p><p>They never open while you draw or drag.</p>',
             hMultiT: 'Several segments',
@@ -115,6 +116,7 @@
             tipMid: 'Milieu : centrer la carte sur le milieu de la sélection',
             tipBack: 'Revenir là où vous étiez avant',
             tipBackNone: 'Revenir : aucune position à retrouver pour l\'instant',
+            tipLen: (m, n) => n === 1 ? 'Longueur du segment sélectionné : ' + m : 'Longueur totale des ' + n + ' segments sélectionnés : ' + m,
             scA: 'Aller au nœud A (ou au premier bout de la chaîne sélectionnée)',
             scB: 'Aller au nœud B (ou à l\'autre bout de la chaîne sélectionnée)',
             scFit: 'Afficher en entier les segments sélectionnés',
@@ -125,7 +127,7 @@
             sbHoverHint: 'Arrêtez le pointeur sur un segment sélectionné : la barre apparaît à côté.',
             sbHelp: 'Aide',
             hPanelT: 'Les boutons',
-            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centrer la carte sur le nœud A ou le nœud B du segment sélectionné. Le zoom est conservé.</td></tr><tr><td><b>&#x26F6;</b></td><td>Zoomer pour que toute la sélection tienne à l\'écran.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centrer sur le milieu, mesuré le long de la voie.</td></tr><tr><td><b>&#x21A9;</b></td><td>Revenir à la vue d\'avant le PREMIER déplacement : A, puis B, puis retour ramène au point de départ.</td></tr></table>',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centrer la carte sur le nœud A ou le nœud B du segment sélectionné. Le zoom est conservé.</td></tr><tr><td><b>&#x26F6;</b></td><td>Zoomer pour que toute la sélection tienne à l\'écran.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centrer sur le milieu, mesuré le long de la voie.</td></tr><tr><td><b>&#x21A9;</b></td><td>Revenir à la vue d\'avant le PREMIER déplacement : A, puis B, puis retour ramène au point de départ.</td></tr><tr><td><b>km</b></td><td>Longueur de la sélection (le total pour plusieurs segments) — le même chiffre qu\'en bas du panneau.</td></tr></table>',
             hHoverT: 'Au survol',
             hHoverB: '<p>Arrêtez un instant le pointeur sur un segment sélectionné : les mêmes boutons apparaissent à côté. Un clic, un écart, un déplacement de la carte ou <kbd>Échap</kbd> les referme.</p><p>Ils ne s\'ouvrent jamais pendant un tracé ou un glisser.</p>',
             hMultiT: 'Plusieurs segments',
@@ -144,6 +146,7 @@
             tipMid: 'Mitte: Karte auf die Mitte der Auswahl zentrieren',
             tipBack: 'Zurück zur vorherigen Position',
             tipBackNone: 'Zurück: noch keine Position zum Zurückkehren',
+            tipLen: (m, n) => n === 1 ? 'Länge des ausgewählten Segments: ' + m : 'Gesamtlänge der ' + n + ' ausgewählten Segmente: ' + m,
             scA: 'Zu Knoten A springen (oder zum ersten Ende der Kette)',
             scB: 'Zu Knoten B springen (oder zum anderen Ende der Kette)',
             scFit: 'Ausgewählte Segmente ganz anzeigen',
@@ -154,7 +157,7 @@
             sbHoverHint: 'Den Zeiger auf einem ausgewählten Segment ruhen lassen: die Leiste erscheint daneben.',
             sbHelp: 'Hilfe',
             hPanelT: 'Die Schaltflächen',
-            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Karte auf Knoten A oder Knoten B des ausgewählten Segments zentrieren. Der Zoom bleibt.</td></tr><tr><td><b>&#x26F6;</b></td><td>So zoomen, dass die ganze Auswahl auf den Bildschirm passt.</td></tr><tr><td><b>&#x25CE;</b></td><td>Auf die Mitte zentrieren, entlang der Straße gemessen.</td></tr><tr><td><b>&#x21A9;</b></td><td>Zurück zur Ansicht vor der ERSTEN Bewegung: A, dann B, dann zurück führt zum Ausgangspunkt.</td></tr></table>',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Karte auf Knoten A oder Knoten B des ausgewählten Segments zentrieren. Der Zoom bleibt.</td></tr><tr><td><b>&#x26F6;</b></td><td>So zoomen, dass die ganze Auswahl auf den Bildschirm passt.</td></tr><tr><td><b>&#x25CE;</b></td><td>Auf die Mitte zentrieren, entlang der Straße gemessen.</td></tr><tr><td><b>&#x21A9;</b></td><td>Zurück zur Ansicht vor der ERSTEN Bewegung: A, dann B, dann zurück führt zum Ausgangspunkt.</td></tr><tr><td><b>km</b></td><td>Länge der Auswahl (die Summe bei mehreren Segmenten) — derselbe Wert wie unten im Bereich.</td></tr></table>',
             hHoverT: 'Beim Überfahren',
             hHoverB: '<p>Den Zeiger kurz auf einem ausgewählten Segment ruhen lassen: dieselben Schaltflächen erscheinen daneben. Ein Klick, Wegbewegen, Verschieben der Karte oder <kbd>Esc</kbd> schließt sie.</p><p>Beim Zeichnen oder Ziehen öffnen sie sich nie.</p>',
             hMultiT: 'Mehrere Segmente',
@@ -173,6 +176,7 @@
             tipMid: 'Centro: centrar el mapa en el punto medio de la selección',
             tipBack: 'Volver adonde estaba antes',
             tipBackNone: 'Volver: todavía no hay posición a la que volver',
+            tipLen: (m, n) => n === 1 ? 'Longitud del segmento seleccionado: ' + m : 'Longitud total de los ' + n + ' segmentos seleccionados: ' + m,
             scA: 'Ir al nodo A (o al primer extremo de la cadena seleccionada)',
             scB: 'Ir al nodo B (o al otro extremo de la cadena seleccionada)',
             scFit: 'Mostrar enteros los segmentos seleccionados',
@@ -183,7 +187,7 @@
             sbHoverHint: 'Detenga el puntero sobre un segmento seleccionado: la barra aparece al lado.',
             sbHelp: 'Ayuda',
             hPanelT: 'Los botones',
-            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centrar el mapa en el nodo A o B del segmento seleccionado. Se conserva el zoom.</td></tr><tr><td><b>&#x26F6;</b></td><td>Hacer zoom para que toda la selección quepa en pantalla.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centrar en el punto medio, medido a lo largo de la vía.</td></tr><tr><td><b>&#x21A9;</b></td><td>Volver a la vista anterior al PRIMER movimiento: A, luego B, luego volver lleva al punto de partida.</td></tr></table>',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centrar el mapa en el nodo A o B del segmento seleccionado. Se conserva el zoom.</td></tr><tr><td><b>&#x26F6;</b></td><td>Hacer zoom para que toda la selección quepa en pantalla.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centrar en el punto medio, medido a lo largo de la vía.</td></tr><tr><td><b>&#x21A9;</b></td><td>Volver a la vista anterior al PRIMER movimiento: A, luego B, luego volver lleva al punto de partida.</td></tr><tr><td><b>km</b></td><td>Longitud de la selección (el total si hay varios segmentos) — la misma cifra que al pie del panel.</td></tr></table>',
             hHoverT: 'Al pasar el puntero',
             hHoverB: '<p>Detenga un momento el puntero sobre un segmento seleccionado: aparecen los mismos botones al lado. Un clic, alejarse, mover el mapa o <kbd>Esc</kbd> los cierra.</p><p>Nunca se abren mientras dibuja o arrastra.</p>',
             hMultiT: 'Varios segmentos',
@@ -202,6 +206,7 @@
             tipMid: 'Centro: centra la mappa sul punto medio della selezione',
             tipBack: 'Torna dov\'eri prima',
             tipBackNone: 'Indietro: ancora nessuna posizione a cui tornare',
+            tipLen: (m, n) => n === 1 ? 'Lunghezza del segmento selezionato: ' + m : 'Lunghezza totale dei ' + n + ' segmenti selezionati: ' + m,
             scA: 'Vai al nodo A (o al primo estremo della catena selezionata)',
             scB: 'Vai al nodo B (o all\'altro estremo della catena selezionata)',
             scFit: 'Mostra per intero i segmenti selezionati',
@@ -212,7 +217,7 @@
             sbHoverHint: 'Fermate il puntatore su un segmento selezionato: la barra appare accanto.',
             sbHelp: 'Aiuto',
             hPanelT: 'I pulsanti',
-            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centra la mappa sul nodo A o B del segmento selezionato. Lo zoom resta invariato.</td></tr><tr><td><b>&#x26F6;</b></td><td>Zoom perché tutta la selezione stia sullo schermo.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centra sul punto medio, misurato lungo la strada.</td></tr><tr><td><b>&#x21A9;</b></td><td>Torna alla vista prima del PRIMO spostamento: A, poi B, poi indietro riporta al punto di partenza.</td></tr></table>',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centra la mappa sul nodo A o B del segmento selezionato. Lo zoom resta invariato.</td></tr><tr><td><b>&#x26F6;</b></td><td>Zoom perché tutta la selezione stia sullo schermo.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centra sul punto medio, misurato lungo la strada.</td></tr><tr><td><b>&#x21A9;</b></td><td>Torna alla vista prima del PRIMO spostamento: A, poi B, poi indietro riporta al punto di partenza.</td></tr><tr><td><b>km</b></td><td>Lunghezza della selezione (il totale per più segmenti) — lo stesso valore in fondo al pannello.</td></tr></table>',
             hHoverT: 'Al passaggio',
             hHoverB: '<p>Fermate un attimo il puntatore su un segmento selezionato: accanto appaiono gli stessi pulsanti. Un clic, allontanarsi, spostare la mappa o <kbd>Esc</kbd> li chiude.</p><p>Non si aprono mai mentre si disegna o si trascina.</p>',
             hMultiT: 'Più segmenti',
@@ -231,6 +236,7 @@
             tipMid: 'Meio: centralizar o mapa no meio da seleção',
             tipBack: 'Voltar para onde você estava antes',
             tipBackNone: 'Voltar: ainda não há posição para voltar',
+            tipLen: (m, n) => n === 1 ? 'Comprimento do segmento selecionado: ' + m : 'Comprimento total dos ' + n + ' segmentos selecionados: ' + m,
             scA: 'Ir ao nó A (ou à primeira ponta da cadeia selecionada)',
             scB: 'Ir ao nó B (ou à outra ponta da cadeia selecionada)',
             scFit: 'Mostrar inteiros os segmentos selecionados',
@@ -241,7 +247,7 @@
             sbHoverHint: 'Pare o ponteiro sobre um segmento selecionado: a barra aparece ao lado.',
             sbHelp: 'Ajuda',
             hPanelT: 'Os botões',
-            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centralizar o mapa no nó A ou B do segmento selecionado. O zoom é mantido.</td></tr><tr><td><b>&#x26F6;</b></td><td>Dar zoom para que toda a seleção caiba na tela.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centralizar no meio, medido ao longo da via.</td></tr><tr><td><b>&#x21A9;</b></td><td>Voltar à vista anterior ao PRIMEIRO movimento: A, depois B, depois voltar leva ao ponto de partida.</td></tr></table>',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centralizar o mapa no nó A ou B do segmento selecionado. O zoom é mantido.</td></tr><tr><td><b>&#x26F6;</b></td><td>Dar zoom para que toda a seleção caiba na tela.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centralizar no meio, medido ao longo da via.</td></tr><tr><td><b>&#x21A9;</b></td><td>Voltar à vista anterior ao PRIMEIRO movimento: A, depois B, depois voltar leva ao ponto de partida.</td></tr><tr><td><b>km</b></td><td>Comprimento da seleção (o total para vários segmentos) — o mesmo valor do rodapé do painel.</td></tr></table>',
             hHoverT: 'Ao passar o mouse',
             hHoverB: '<p>Pare o ponteiro um instante sobre um segmento selecionado: os mesmos botões aparecem ao lado. Um clique, afastar-se, mover o mapa ou <kbd>Esc</kbd> os fecha.</p><p>Nunca abrem durante um desenho ou um arrasto.</p>',
             hMultiT: 'Vários segmentos',
@@ -260,6 +266,7 @@
             tipMid: 'Meio: centrar o mapa no meio da seleção',
             tipBack: 'Voltar ao sítio onde estava antes',
             tipBackNone: 'Voltar: ainda não há posição para onde voltar',
+            tipLen: (m, n) => n === 1 ? 'Comprimento do segmento selecionado: ' + m : 'Comprimento total dos ' + n + ' segmentos selecionados: ' + m,
             scA: 'Ir ao nó A (ou à primeira extremidade da cadeia selecionada)',
             scB: 'Ir ao nó B (ou à outra extremidade da cadeia selecionada)',
             scFit: 'Mostrar por inteiro os segmentos selecionados',
@@ -270,7 +277,7 @@
             sbHoverHint: 'Pare o ponteiro sobre um segmento selecionado: a barra aparece ao lado.',
             sbHelp: 'Ajuda',
             hPanelT: 'Os botões',
-            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centrar o mapa no nó A ou B do segmento selecionado. O zoom mantém-se.</td></tr><tr><td><b>&#x26F6;</b></td><td>Fazer zoom para que toda a seleção caiba no ecrã.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centrar no meio, medido ao longo da via.</td></tr><tr><td><b>&#x21A9;</b></td><td>Voltar à vista anterior ao PRIMEIRO movimento: A, depois B, depois voltar leva ao ponto de partida.</td></tr></table>',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centrar o mapa no nó A ou B do segmento selecionado. O zoom mantém-se.</td></tr><tr><td><b>&#x26F6;</b></td><td>Fazer zoom para que toda a seleção caiba no ecrã.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centrar no meio, medido ao longo da via.</td></tr><tr><td><b>&#x21A9;</b></td><td>Voltar à vista anterior ao PRIMEIRO movimento: A, depois B, depois voltar leva ao ponto de partida.</td></tr><tr><td><b>km</b></td><td>Comprimento da seleção (o total para vários segmentos) — o mesmo valor do fundo do painel.</td></tr></table>',
             hHoverT: 'Ao passar o rato',
             hHoverB: '<p>Pare o ponteiro um instante sobre um segmento selecionado: os mesmos botões aparecem ao lado. Um clique, afastar-se, mover o mapa ou <kbd>Esc</kbd> fecha-os.</p><p>Nunca abrem durante um desenho ou um arrasto.</p>',
             hMultiT: 'Vários segmentos',
@@ -289,6 +296,7 @@
             tipMid: 'אמצע: מרכז את המפה על אמצע הבחירה',
             tipBack: 'חזרה למקום שבו היית קודם',
             tipBackNone: 'חזרה: עדיין אין מיקום לחזור אליו',
+            tipLen: (m, n) => n === 1 ? 'אורך המקטע הנבחר: ' + m : 'האורך הכולל של ' + n + ' המקטעים הנבחרים: ' + m,
             scA: 'קפיצה לצומת A (או לקצה הראשון של השרשרת הנבחרת)',
             scB: 'קפיצה לצומת B (או לקצה השני של השרשרת הנבחרת)',
             scFit: 'הצגת המקטעים הנבחרים במלואם',
@@ -299,7 +307,7 @@
             sbHoverHint: 'עצרו את הסמן על מקטע נבחר: הסרגל מופיע לידו.',
             sbHelp: 'עזרה',
             hPanelT: 'הכפתורים',
-            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>מרכז את המפה על צומת A או B של המקטע הנבחר. הזום נשמר.</td></tr><tr><td><b>&#x26F6;</b></td><td>זום כך שכל הבחירה תיכנס למסך.</td></tr><tr><td><b>&#x25CE;</b></td><td>מרכז על האמצע, הנמדד לאורך הדרך.</td></tr><tr><td><b>&#x21A9;</b></td><td>חזרה לתצוגה שלפני התזוזה הראשונה: A, אחר כך B, אחר כך חזרה — מחזיר לנקודת המוצא.</td></tr></table>',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>מרכז את המפה על צומת A או B של המקטע הנבחר. הזום נשמר.</td></tr><tr><td><b>&#x26F6;</b></td><td>זום כך שכל הבחירה תיכנס למסך.</td></tr><tr><td><b>&#x25CE;</b></td><td>מרכז על האמצע, הנמדד לאורך הדרך.</td></tr><tr><td><b>&#x21A9;</b></td><td>חזרה לתצוגה שלפני התזוזה הראשונה: A, אחר כך B, אחר כך חזרה — מחזיר לנקודת המוצא.</td></tr><tr><td><b>km</b></td><td>אורך הבחירה (הסכום עבור כמה מקטעים) — אותו ערך שבתחתית הלוח.</td></tr></table>',
             hHoverT: 'במעבר עכבר',
             hHoverB: '<p>עצרו לרגע את הסמן על מקטע נבחר: אותם כפתורים מופיעים לידו. לחיצה, התרחקות, הזזת המפה או <kbd>Esc</kbd> סוגרים אותם.</p><p>הם לעולם לא נפתחים בזמן ציור או גרירה.</p>',
             hMultiT: 'כמה מקטעים',
@@ -321,7 +329,11 @@
         } catch (e) { return 'en'; }
     };
     let _lang = 'en';
-    const t = key => (DICO[_lang] && DICO[_lang][key]) || DICO.en[key] || key;
+    const t = (key, ...args) => {
+        const v = (DICO[_lang] && DICO[_lang][key]) || DICO.en[key];
+        if (typeof v === 'function') return v(...args);
+        return v !== undefined ? v : key;
+    };
 
     function lireOpts() {
         try { return Object.assign({ survol: true }, JSON.parse(localStorage.getItem(OPTS_KEY) || '{}')); }
@@ -433,6 +445,9 @@
             mid: trace ? pointAMiLongueur(trace) : [(w + e) / 2, (s + n) / 2],
             bbox: [w, s, e, n],
             listes,
+            n: segs.length,
+            // Même somme que « Longueur » en bas du panneau de WME.
+            metres: segs.reduce((tot, x) => tot + (x.length || 0), 0),
         };
     }
 
@@ -538,7 +553,11 @@
 .wjn-chip.wjn-ico { font-size: 13px; color: var(--wjn-text2); }
 .wjn-chip.wjn-ico:hover { color: #fff; }
 .wjn-chip[disabled] { opacity: .4; cursor: not-allowed; pointer-events: none; }
-.wjn-back { margin-inline-start: auto; }
+.wjn-len {
+    display: inline-flex; align-items: center; height: 22px; padding: 0 8px; margin-inline-start: auto;
+    border-radius: 50px; background: #eceff1; color: #37474f;
+    font-size: 11px; font-weight: 700; white-space: nowrap; cursor: help; font-variant-numeric: tabular-nums;
+}
 .wjn-chip:focus-visible, #wjn-sidebar :focus-visible { outline: 2px solid var(--wjn-blue); outline-offset: 1px; }
 /* Barre de survol : les mêmes pastilles dans une carte flottante. Posée sur le body, jamais
    dans un conteneur positionné de WME — elle passerait sous la carte. */
@@ -548,7 +567,7 @@
     border-radius: 50px; box-shadow: var(--wjn-shadow);
 }
 #${POP_ID}[hidden] { display: none !important; }
-#${POP_ID} .wjn-back { margin-inline-start: 0; }
+#${POP_ID} .wjn-len { margin-inline-start: 0; }
 /* Onglet Scripts — calqué sur #wct-sidebar */
 #wjn-sidebar { padding: 10px 12px; font-family: 'Rubik','Open Sans',sans-serif; font-size: 12px; color: var(--wjn-text); }
 #wjn-sidebar h2 { font-size: 13px; font-weight: 700; color: var(--wjn-blue); margin: 0 0 8px; }
@@ -605,6 +624,24 @@
         return h;
     }
 
+    // Longueur au format de la langue (« 3,84 km » et non « 3.842 km », qu'un francophone lit
+    // trois mille huit cents) et dans l'unité choisie dans les réglages de WME ; la valeur
+    // exacte va dans l'infobulle.
+    function longueur(metres) {
+        let imperial = false;
+        try { imperial = !!sdk.Settings.getUserSettings().isImperial; } catch (e) { }
+        const nb = (v, d) => new Intl.NumberFormat(_lang, { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
+        const esp = ' ';
+        if (imperial) {
+            const ft = metres * 3.28084;
+            return { court: ft < 528 ? nb(ft, 0) + esp + 'ft' : nb(ft / 5280, 2) + esp + 'mi', exact: nb(ft, 0) + esp + 'ft' };
+        }
+        const court = metres < 1000 ? nb(metres, 0) + esp + 'm' : nb(metres / 1000, metres < 10000 ? 2 : 1) + esp + 'km';
+        return { court, exact: nb(metres, 0) + esp + 'm' };
+    }
+
+    const badgeLongueur = () => '<span class="wjn-len"></span>';
+
     const chipRetour = () => '<button type="button" class="wjn-chip wjn-ico wjn-back" data-wjn="back">&#x21A9;</button>';
 
     function titrer(racine, c) {
@@ -618,6 +655,12 @@
             bk.title = retour ? t('tipBack') : t('tipBackNone');
             bk.setAttribute('aria-label', bk.title);
             bk.disabled = !retour;
+        }
+        const ln = racine.querySelector('.wjn-len');
+        if (ln) {
+            const l = longueur(c.metres);
+            ln.textContent = l.court;
+            ln.title = t('tipLen', l.exact, c.n);
         }
     }
 
@@ -656,7 +699,7 @@
         const bar = document.createElement('div');
         bar.id = BAR_ID;
         bar.className = 'wjn-row';
-        bar.innerHTML = rangee(c, true) + chipRetour();
+        bar.innerHTML = rangee(c, true) + '<span class="wjn-sep"></span>' + chipRetour() + badgeLongueur();
         ecouterClics(bar);
         entete.after(bar);
         signatureBarre = sig;
@@ -716,7 +759,7 @@
             document.body.appendChild(pop);
         }
         pop.dir = _lang === 'he' ? 'rtl' : 'ltr';
-        pop.innerHTML = rangee(c, false) + (retour ? '<span class="wjn-sep"></span>' + chipRetour() : '');
+        pop.innerHTML = rangee(c, false) + (retour ? '<span class="wjn-sep"></span>' + chipRetour() : '') + '<span class="wjn-sep"></span>' + badgeLongueur();
         titrer(pop, c);
         pop.hidden = false;
         // Décalée en bas à droite du pointeur, et ramenée dans la fenêtre si besoin : la barre
