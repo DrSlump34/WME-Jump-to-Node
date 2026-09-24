@@ -9,7 +9,7 @@
 // @name:he      WME Jump to Node
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgdmlld0JveD0nMCAwIDY0IDY0Jz48cmVjdCB3aWR0aD0nNjQnIGhlaWdodD0nNjQnIHJ4PScxMicgZmlsbD0nIzE1NjVjMCcvPjxwYXRoIGQ9J00xMiA0OCBDMjQgNDYgMzAgMjAgNTAgMTYnIGZpbGw9J25vbmUnIHN0cm9rZT0nI2ZmZmZmZicgc3Ryb2tlLXdpZHRoPSc1JyBzdHJva2UtbGluZWNhcD0ncm91bmQnLz48Y2lyY2xlIGN4PScxMicgY3k9JzQ4JyByPSc2JyBmaWxsPScjZmZmZmZmJy8+PGNpcmNsZSBjeD0nNTAnIGN5PScxNicgcj0nOScgZmlsbD0nbm9uZScgc3Ryb2tlPScjZmI4YzAwJyBzdHJva2Utd2lkdGg9JzQnLz48Y2lyY2xlIGN4PSc1MCcgY3k9JzE2JyByPSc0JyBmaWxsPScjZmI4YzAwJy8+PC9zdmc+Cg==
 // @namespace    https://github.com/DrSlump34
-// @version      0.02.00
+// @version      0.03.00
 // @description  Jump to either end of the selected segment, to its middle, or fit it on screen — from the segment panel, from a small toolbar that appears when you hover the selection, or by keyboard. A Back button returns you where you were.
 // @description:fr Sauter à l'une ou l'autre extrémité du segment sélectionné, à son milieu, ou l'afficher en entier — depuis le panneau du segment, depuis une petite barre qui apparaît au survol de la sélection, ou au clavier. Un bouton Revenir vous ramène d'où vous veniez.
 // @description:de Springen Sie zu einem Ende des ausgewählten Segments, zu seiner Mitte, oder zeigen Sie es ganz an — über den Segmentbereich, über eine kleine Leiste, die beim Überfahren der Auswahl erscheint, oder per Tastatur. Eine Zurück-Schaltfläche bringt Sie zurück.
@@ -77,176 +77,237 @@
 
     const DICO = {
         en: {
-            goTo: 'Go to node', goToChain: 'Go to',
-            fit: 'Fit', mid: 'Middle', back: 'Back',
+            lblNode: 'Node', lblEnds: 'Ends',
             tipA: 'Center the map on node A (start of the segment)',
             tipB: 'Center the map on node B (end of the segment)',
             tipE1: 'Center the map on the first end of the selected chain',
             tipE2: 'Center the map on the other end of the selected chain',
-            tipFit: 'Zoom to show the whole selection',
-            tipMid: 'Center the map on the middle of the selection',
-            tipBack: 'Return to where you were before',
-            tipBackNone: 'Nothing to return to yet',
+            tipFit: 'Fit: zoom to show the whole selection',
+            tipMid: 'Middle: center the map on the middle of the selection',
+            tipBack: 'Back: return to where you were before',
+            tipBackNone: 'Back: nothing to return to yet',
             scA: 'Jump to node A (or first end of the selected chain)',
             scB: 'Jump to node B (or other end of the selected chain)',
             scFit: 'Fit the selected segments on screen',
             scMid: 'Jump to the middle of the selection',
             scBack: 'Return to the position before the jump',
-            pHover: 'Show the toolbar when hovering the selected segments',
-            pHoverHelp: 'Rest the pointer on a selected segment: a small toolbar appears next to it. Press Esc to dismiss it.',
-            pKeys: 'Keyboard shortcuts are listed, without keys, under Settings › Keyboard shortcuts — assign the ones you want there.',
+            sbHint: 'Jump to either end of the selected segment, to its middle, or fit it on screen — then come back.',
+            sbHover: 'Toolbar on hover',
+            sbHoverHint: 'Rest the pointer on a selected segment: the toolbar appears next to it.',
+            sbHelp: 'Help',
+            hPanelT: 'The buttons',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Center the map on node A or node B of the selected segment. Zoom is kept.</td></tr><tr><td><b>&#x26F6;</b></td><td>Zoom so the whole selection fits on screen.</td></tr><tr><td><b>&#x25CE;</b></td><td>Center on the middle, measured along the road.</td></tr><tr><td><b>&#x21A9;</b></td><td>Back to the view before the FIRST move: A, then B, then back brings you home.</td></tr></table>',
+            hHoverT: 'On hover',
+            hHoverB: '<p>Rest the pointer on a selected segment for a moment: the same buttons appear next to it. Click, move away, move the map or press <kbd>Esc</kbd> to close them.</p><p>They never open while you draw or drag.</p>',
+            hMultiT: 'Several segments',
+            hMultiB: '<p>If the selected segments follow one another, <b>&#x21E4;</b> and <b>&#x21E5;</b> jump to the two ends of the chain, and &#x25CE; to its middle.</p><p>If they do not, only &#x26F6; and &#x25CE; (center of the area) are offered.</p>',
+            hKeysT: 'Keyboard',
+            hKeysB: '<p>Five shortcuts are listed <b>without keys</b> under Settings › Keyboard shortcuts, so as not to take any from another script. Assign the ones you want there.</p>',
+            hSafeB: 'The script never changes the map: nothing enters the undo stack.',
         },
         fr: {
-            goTo: 'Aller au nœud', goToChain: 'Aller à',
-            fit: 'Tout voir', mid: 'Milieu', back: 'Revenir',
+            lblNode: 'Nœud', lblEnds: 'Bouts',
             tipA: 'Centrer la carte sur le nœud A (début du segment)',
             tipB: 'Centrer la carte sur le nœud B (fin du segment)',
             tipE1: 'Centrer la carte sur le premier bout de la chaîne sélectionnée',
             tipE2: 'Centrer la carte sur l\'autre bout de la chaîne sélectionnée',
-            tipFit: 'Zoomer pour voir toute la sélection',
-            tipMid: 'Centrer la carte sur le milieu de la sélection',
+            tipFit: 'Tout voir : zoomer pour afficher toute la sélection',
+            tipMid: 'Milieu : centrer la carte sur le milieu de la sélection',
             tipBack: 'Revenir là où vous étiez avant',
-            tipBackNone: 'Aucune position à retrouver pour l\'instant',
+            tipBackNone: 'Revenir : aucune position à retrouver pour l\'instant',
             scA: 'Aller au nœud A (ou au premier bout de la chaîne sélectionnée)',
             scB: 'Aller au nœud B (ou à l\'autre bout de la chaîne sélectionnée)',
             scFit: 'Afficher en entier les segments sélectionnés',
             scMid: 'Aller au milieu de la sélection',
             scBack: 'Revenir à la position d\'avant le saut',
-            pHover: 'Afficher la barre au survol des segments sélectionnés',
-            pHoverHelp: 'Arrêtez le pointeur sur un segment sélectionné : une petite barre apparaît à côté. Échap la referme.',
-            pKeys: 'Les raccourcis clavier sont listés, sans touches, dans Paramètres › Raccourcis clavier — attribuez-y ceux que vous voulez.',
+            sbHint: 'Aller à l\'une ou l\'autre extrémité du segment sélectionné, à son milieu, ou l\'afficher en entier — puis revenir.',
+            sbHover: 'Barre au survol',
+            sbHoverHint: 'Arrêtez le pointeur sur un segment sélectionné : la barre apparaît à côté.',
+            sbHelp: 'Aide',
+            hPanelT: 'Les boutons',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centrer la carte sur le nœud A ou le nœud B du segment sélectionné. Le zoom est conservé.</td></tr><tr><td><b>&#x26F6;</b></td><td>Zoomer pour que toute la sélection tienne à l\'écran.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centrer sur le milieu, mesuré le long de la voie.</td></tr><tr><td><b>&#x21A9;</b></td><td>Revenir à la vue d\'avant le PREMIER déplacement : A, puis B, puis retour ramène au point de départ.</td></tr></table>',
+            hHoverT: 'Au survol',
+            hHoverB: '<p>Arrêtez un instant le pointeur sur un segment sélectionné : les mêmes boutons apparaissent à côté. Un clic, un écart, un déplacement de la carte ou <kbd>Échap</kbd> les referme.</p><p>Ils ne s\'ouvrent jamais pendant un tracé ou un glisser.</p>',
+            hMultiT: 'Plusieurs segments',
+            hMultiB: '<p>Si les segments sélectionnés se suivent, <b>&#x21E4;</b> et <b>&#x21E5;</b> mènent aux deux bouts de la chaîne, et &#x25CE; à son milieu.</p><p>Sinon, seuls &#x26F6; et &#x25CE; (centre de l\'emprise) sont proposés.</p>',
+            hKeysT: 'Clavier',
+            hKeysB: '<p>Cinq raccourcis sont listés <b>sans touches</b> dans Paramètres › Raccourcis clavier, pour n\'en prendre aucune à un autre script. Attribuez-y ceux que vous voulez.</p>',
+            hSafeB: 'Le script ne modifie jamais la carte : rien n\'entre dans la pile d\'annulation.',
         },
         de: {
-            goTo: 'Zu Knoten', goToChain: 'Gehe zu',
-            fit: 'Alles', mid: 'Mitte', back: 'Zurück',
+            lblNode: 'Knoten', lblEnds: 'Enden',
             tipA: 'Karte auf Knoten A zentrieren (Anfang des Segments)',
             tipB: 'Karte auf Knoten B zentrieren (Ende des Segments)',
             tipE1: 'Karte auf das erste Ende der ausgewählten Kette zentrieren',
             tipE2: 'Karte auf das andere Ende der ausgewählten Kette zentrieren',
-            tipFit: 'Zoomen, um die ganze Auswahl zu zeigen',
-            tipMid: 'Karte auf die Mitte der Auswahl zentrieren',
+            tipFit: 'Alles: zoomen, um die ganze Auswahl zu zeigen',
+            tipMid: 'Mitte: Karte auf die Mitte der Auswahl zentrieren',
             tipBack: 'Zurück zur vorherigen Position',
-            tipBackNone: 'Noch keine Position zum Zurückkehren',
+            tipBackNone: 'Zurück: noch keine Position zum Zurückkehren',
             scA: 'Zu Knoten A springen (oder zum ersten Ende der Kette)',
             scB: 'Zu Knoten B springen (oder zum anderen Ende der Kette)',
             scFit: 'Ausgewählte Segmente ganz anzeigen',
             scMid: 'Zur Mitte der Auswahl springen',
             scBack: 'Zurück zur Position vor dem Sprung',
-            pHover: 'Leiste beim Überfahren der ausgewählten Segmente zeigen',
-            pHoverHelp: 'Den Zeiger auf einem ausgewählten Segment ruhen lassen: daneben erscheint eine kleine Leiste. Esc schließt sie.',
-            pKeys: 'Die Tastenkürzel stehen ohne Tasten unter Einstellungen › Tastenkürzel — dort nach Wunsch belegen.',
+            sbHint: 'Zu einem Ende des ausgewählten Segments springen, zu seiner Mitte, oder es ganz anzeigen — und wieder zurück.',
+            sbHover: 'Leiste beim Überfahren',
+            sbHoverHint: 'Den Zeiger auf einem ausgewählten Segment ruhen lassen: die Leiste erscheint daneben.',
+            sbHelp: 'Hilfe',
+            hPanelT: 'Die Schaltflächen',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Karte auf Knoten A oder Knoten B des ausgewählten Segments zentrieren. Der Zoom bleibt.</td></tr><tr><td><b>&#x26F6;</b></td><td>So zoomen, dass die ganze Auswahl auf den Bildschirm passt.</td></tr><tr><td><b>&#x25CE;</b></td><td>Auf die Mitte zentrieren, entlang der Straße gemessen.</td></tr><tr><td><b>&#x21A9;</b></td><td>Zurück zur Ansicht vor der ERSTEN Bewegung: A, dann B, dann zurück führt zum Ausgangspunkt.</td></tr></table>',
+            hHoverT: 'Beim Überfahren',
+            hHoverB: '<p>Den Zeiger kurz auf einem ausgewählten Segment ruhen lassen: dieselben Schaltflächen erscheinen daneben. Ein Klick, Wegbewegen, Verschieben der Karte oder <kbd>Esc</kbd> schließt sie.</p><p>Beim Zeichnen oder Ziehen öffnen sie sich nie.</p>',
+            hMultiT: 'Mehrere Segmente',
+            hMultiB: '<p>Folgen die ausgewählten Segmente aufeinander, führen <b>&#x21E4;</b> und <b>&#x21E5;</b> zu den beiden Enden der Kette und &#x25CE; zu ihrer Mitte.</p><p>Sonst werden nur &#x26F6; und &#x25CE; (Mitte des Bereichs) angeboten.</p>',
+            hKeysT: 'Tastatur',
+            hKeysB: '<p>Fünf Tastenkürzel stehen <b>ohne Tasten</b> unter Einstellungen › Tastenkürzel, um keinem anderen Skript eine wegzunehmen. Dort nach Wunsch belegen.</p>',
+            hSafeB: 'Das Skript ändert die Karte nie: nichts gelangt in den Rückgängig-Verlauf.',
         },
         es: {
-            goTo: 'Ir al nodo', goToChain: 'Ir a',
-            fit: 'Ver todo', mid: 'Centro', back: 'Volver',
+            lblNode: 'Nodo', lblEnds: 'Extremos',
             tipA: 'Centrar el mapa en el nodo A (inicio del segmento)',
             tipB: 'Centrar el mapa en el nodo B (final del segmento)',
             tipE1: 'Centrar el mapa en el primer extremo de la cadena seleccionada',
             tipE2: 'Centrar el mapa en el otro extremo de la cadena seleccionada',
-            tipFit: 'Hacer zoom para ver toda la selección',
-            tipMid: 'Centrar el mapa en el punto medio de la selección',
+            tipFit: 'Ver todo: hacer zoom para mostrar toda la selección',
+            tipMid: 'Centro: centrar el mapa en el punto medio de la selección',
             tipBack: 'Volver adonde estaba antes',
-            tipBackNone: 'Todavía no hay posición a la que volver',
+            tipBackNone: 'Volver: todavía no hay posición a la que volver',
             scA: 'Ir al nodo A (o al primer extremo de la cadena seleccionada)',
             scB: 'Ir al nodo B (o al otro extremo de la cadena seleccionada)',
             scFit: 'Mostrar enteros los segmentos seleccionados',
             scMid: 'Ir al punto medio de la selección',
             scBack: 'Volver a la posición anterior al salto',
-            pHover: 'Mostrar la barra al pasar sobre los segmentos seleccionados',
-            pHoverHelp: 'Detenga el puntero sobre un segmento seleccionado: aparece una pequeña barra al lado. Esc la cierra.',
-            pKeys: 'Los atajos de teclado aparecen, sin teclas, en Ajustes › Atajos de teclado — asigne allí los que quiera.',
+            sbHint: 'Ir a uno u otro extremo del segmento seleccionado, a su punto medio, o mostrarlo entero — y volver.',
+            sbHover: 'Barra al pasar el puntero',
+            sbHoverHint: 'Detenga el puntero sobre un segmento seleccionado: la barra aparece al lado.',
+            sbHelp: 'Ayuda',
+            hPanelT: 'Los botones',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centrar el mapa en el nodo A o B del segmento seleccionado. Se conserva el zoom.</td></tr><tr><td><b>&#x26F6;</b></td><td>Hacer zoom para que toda la selección quepa en pantalla.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centrar en el punto medio, medido a lo largo de la vía.</td></tr><tr><td><b>&#x21A9;</b></td><td>Volver a la vista anterior al PRIMER movimiento: A, luego B, luego volver lleva al punto de partida.</td></tr></table>',
+            hHoverT: 'Al pasar el puntero',
+            hHoverB: '<p>Detenga un momento el puntero sobre un segmento seleccionado: aparecen los mismos botones al lado. Un clic, alejarse, mover el mapa o <kbd>Esc</kbd> los cierra.</p><p>Nunca se abren mientras dibuja o arrastra.</p>',
+            hMultiT: 'Varios segmentos',
+            hMultiB: '<p>Si los segmentos seleccionados se siguen, <b>&#x21E4;</b> y <b>&#x21E5;</b> llevan a los dos extremos de la cadena, y &#x25CE; a su punto medio.</p><p>Si no, solo se ofrecen &#x26F6; y &#x25CE; (centro del área).</p>',
+            hKeysT: 'Teclado',
+            hKeysB: '<p>Cinco atajos aparecen <b>sin teclas</b> en Ajustes › Atajos de teclado, para no quitarle ninguna a otro script. Asigne allí los que quiera.</p>',
+            hSafeB: 'El script nunca modifica el mapa: nada entra en el historial de deshacer.',
         },
         it: {
-            goTo: 'Vai al nodo', goToChain: 'Vai a',
-            fit: 'Tutto', mid: 'Centro', back: 'Indietro',
+            lblNode: 'Nodo', lblEnds: 'Estremi',
             tipA: 'Centra la mappa sul nodo A (inizio del segmento)',
             tipB: 'Centra la mappa sul nodo B (fine del segmento)',
             tipE1: 'Centra la mappa sul primo estremo della catena selezionata',
             tipE2: 'Centra la mappa sull\'altro estremo della catena selezionata',
-            tipFit: 'Zoom per vedere tutta la selezione',
-            tipMid: 'Centra la mappa sul punto medio della selezione',
+            tipFit: 'Tutto: zoom per mostrare tutta la selezione',
+            tipMid: 'Centro: centra la mappa sul punto medio della selezione',
             tipBack: 'Torna dov\'eri prima',
-            tipBackNone: 'Ancora nessuna posizione a cui tornare',
+            tipBackNone: 'Indietro: ancora nessuna posizione a cui tornare',
             scA: 'Vai al nodo A (o al primo estremo della catena selezionata)',
             scB: 'Vai al nodo B (o all\'altro estremo della catena selezionata)',
             scFit: 'Mostra per intero i segmenti selezionati',
             scMid: 'Vai al punto medio della selezione',
             scBack: 'Torna alla posizione precedente al salto',
-            pHover: 'Mostra la barra passando sui segmenti selezionati',
-            pHoverHelp: 'Fermate il puntatore su un segmento selezionato: accanto appare una piccola barra. Esc la chiude.',
-            pKeys: 'Le scorciatoie da tastiera sono elencate, senza tasti, in Impostazioni › Scorciatoie da tastiera — assegnate lì quelle che volete.',
+            sbHint: 'Andare a uno dei due estremi del segmento selezionato, al suo punto medio, o mostrarlo per intero — e tornare.',
+            sbHover: 'Barra al passaggio',
+            sbHoverHint: 'Fermate il puntatore su un segmento selezionato: la barra appare accanto.',
+            sbHelp: 'Aiuto',
+            hPanelT: 'I pulsanti',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centra la mappa sul nodo A o B del segmento selezionato. Lo zoom resta invariato.</td></tr><tr><td><b>&#x26F6;</b></td><td>Zoom perché tutta la selezione stia sullo schermo.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centra sul punto medio, misurato lungo la strada.</td></tr><tr><td><b>&#x21A9;</b></td><td>Torna alla vista prima del PRIMO spostamento: A, poi B, poi indietro riporta al punto di partenza.</td></tr></table>',
+            hHoverT: 'Al passaggio',
+            hHoverB: '<p>Fermate un attimo il puntatore su un segmento selezionato: accanto appaiono gli stessi pulsanti. Un clic, allontanarsi, spostare la mappa o <kbd>Esc</kbd> li chiude.</p><p>Non si aprono mai mentre si disegna o si trascina.</p>',
+            hMultiT: 'Più segmenti',
+            hMultiB: '<p>Se i segmenti selezionati si susseguono, <b>&#x21E4;</b> e <b>&#x21E5;</b> portano ai due estremi della catena, e &#x25CE; al suo punto medio.</p><p>Altrimenti sono proposti solo &#x26F6; e &#x25CE; (centro dell\'area).</p>',
+            hKeysT: 'Tastiera',
+            hKeysB: '<p>Cinque scorciatoie sono elencate <b>senza tasti</b> in Impostazioni › Scorciatoie da tastiera, per non toglierne a un altro script. Assegnate lì quelle che volete.</p>',
+            hSafeB: 'Lo script non modifica mai la mappa: nulla entra nella cronologia di annullamento.',
         },
         'pt-BR': {
-            goTo: 'Ir ao nó', goToChain: 'Ir para',
-            fit: 'Ver tudo', mid: 'Meio', back: 'Voltar',
+            lblNode: 'Nó', lblEnds: 'Pontas',
             tipA: 'Centralizar o mapa no nó A (início do segmento)',
             tipB: 'Centralizar o mapa no nó B (fim do segmento)',
             tipE1: 'Centralizar o mapa na primeira ponta da cadeia selecionada',
             tipE2: 'Centralizar o mapa na outra ponta da cadeia selecionada',
-            tipFit: 'Dar zoom para ver toda a seleção',
-            tipMid: 'Centralizar o mapa no meio da seleção',
+            tipFit: 'Ver tudo: dar zoom para mostrar toda a seleção',
+            tipMid: 'Meio: centralizar o mapa no meio da seleção',
             tipBack: 'Voltar para onde você estava antes',
-            tipBackNone: 'Ainda não há posição para voltar',
+            tipBackNone: 'Voltar: ainda não há posição para voltar',
             scA: 'Ir ao nó A (ou à primeira ponta da cadeia selecionada)',
             scB: 'Ir ao nó B (ou à outra ponta da cadeia selecionada)',
             scFit: 'Mostrar inteiros os segmentos selecionados',
             scMid: 'Ir ao meio da seleção',
             scBack: 'Voltar à posição anterior ao salto',
-            pHover: 'Mostrar a barra ao passar o mouse sobre os segmentos selecionados',
-            pHoverHelp: 'Pare o ponteiro sobre um segmento selecionado: uma pequena barra aparece ao lado. Esc a fecha.',
-            pKeys: 'Os atalhos de teclado aparecem, sem teclas, em Configurações › Atalhos de teclado — atribua lá os que quiser.',
+            sbHint: 'Ir a uma das pontas do segmento selecionado, ao meio dele, ou vê-lo inteiro — e voltar.',
+            sbHover: 'Barra ao passar o mouse',
+            sbHoverHint: 'Pare o ponteiro sobre um segmento selecionado: a barra aparece ao lado.',
+            sbHelp: 'Ajuda',
+            hPanelT: 'Os botões',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centralizar o mapa no nó A ou B do segmento selecionado. O zoom é mantido.</td></tr><tr><td><b>&#x26F6;</b></td><td>Dar zoom para que toda a seleção caiba na tela.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centralizar no meio, medido ao longo da via.</td></tr><tr><td><b>&#x21A9;</b></td><td>Voltar à vista anterior ao PRIMEIRO movimento: A, depois B, depois voltar leva ao ponto de partida.</td></tr></table>',
+            hHoverT: 'Ao passar o mouse',
+            hHoverB: '<p>Pare o ponteiro um instante sobre um segmento selecionado: os mesmos botões aparecem ao lado. Um clique, afastar-se, mover o mapa ou <kbd>Esc</kbd> os fecha.</p><p>Nunca abrem durante um desenho ou um arrasto.</p>',
+            hMultiT: 'Vários segmentos',
+            hMultiB: '<p>Se os segmentos selecionados se seguem, <b>&#x21E4;</b> e <b>&#x21E5;</b> levam às duas pontas da cadeia, e &#x25CE; ao meio dela.</p><p>Caso contrário, só &#x26F6; e &#x25CE; (centro da área) são oferecidos.</p>',
+            hKeysT: 'Teclado',
+            hKeysB: '<p>Cinco atalhos aparecem <b>sem teclas</b> em Configurações › Atalhos de teclado, para não tirar nenhuma de outro script. Atribua lá os que quiser.</p>',
+            hSafeB: 'O script nunca altera o mapa: nada entra no histórico de desfazer.',
         },
         'pt-PT': {
-            goTo: 'Ir ao nó', goToChain: 'Ir para',
-            fit: 'Ver tudo', mid: 'Meio', back: 'Voltar',
+            lblNode: 'Nó', lblEnds: 'Extremos',
             tipA: 'Centrar o mapa no nó A (início do segmento)',
             tipB: 'Centrar o mapa no nó B (fim do segmento)',
             tipE1: 'Centrar o mapa na primeira extremidade da cadeia selecionada',
             tipE2: 'Centrar o mapa na outra extremidade da cadeia selecionada',
-            tipFit: 'Fazer zoom para ver toda a seleção',
-            tipMid: 'Centrar o mapa no meio da seleção',
+            tipFit: 'Ver tudo: fazer zoom para mostrar toda a seleção',
+            tipMid: 'Meio: centrar o mapa no meio da seleção',
             tipBack: 'Voltar ao sítio onde estava antes',
-            tipBackNone: 'Ainda não há posição para onde voltar',
+            tipBackNone: 'Voltar: ainda não há posição para onde voltar',
             scA: 'Ir ao nó A (ou à primeira extremidade da cadeia selecionada)',
             scB: 'Ir ao nó B (ou à outra extremidade da cadeia selecionada)',
             scFit: 'Mostrar por inteiro os segmentos selecionados',
             scMid: 'Ir ao meio da seleção',
             scBack: 'Voltar à posição anterior ao salto',
-            pHover: 'Mostrar a barra ao passar o rato sobre os segmentos selecionados',
-            pHoverHelp: 'Pare o ponteiro sobre um segmento selecionado: aparece uma pequena barra ao lado. Esc fecha-a.',
-            pKeys: 'Os atalhos de teclado aparecem, sem teclas, em Definições › Atalhos de teclado — atribua lá os que quiser.',
+            sbHint: 'Ir a uma das extremidades do segmento selecionado, ao meio, ou vê-lo por inteiro — e voltar.',
+            sbHover: 'Barra ao passar o rato',
+            sbHoverHint: 'Pare o ponteiro sobre um segmento selecionado: a barra aparece ao lado.',
+            sbHelp: 'Ajuda',
+            hPanelT: 'Os botões',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>Centrar o mapa no nó A ou B do segmento selecionado. O zoom mantém-se.</td></tr><tr><td><b>&#x26F6;</b></td><td>Fazer zoom para que toda a seleção caiba no ecrã.</td></tr><tr><td><b>&#x25CE;</b></td><td>Centrar no meio, medido ao longo da via.</td></tr><tr><td><b>&#x21A9;</b></td><td>Voltar à vista anterior ao PRIMEIRO movimento: A, depois B, depois voltar leva ao ponto de partida.</td></tr></table>',
+            hHoverT: 'Ao passar o rato',
+            hHoverB: '<p>Pare o ponteiro um instante sobre um segmento selecionado: os mesmos botões aparecem ao lado. Um clique, afastar-se, mover o mapa ou <kbd>Esc</kbd> fecha-os.</p><p>Nunca abrem durante um desenho ou um arrasto.</p>',
+            hMultiT: 'Vários segmentos',
+            hMultiB: '<p>Se os segmentos selecionados se seguem, <b>&#x21E4;</b> e <b>&#x21E5;</b> levam às duas extremidades da cadeia, e &#x25CE; ao meio.</p><p>Caso contrário, só &#x26F6; e &#x25CE; (centro da área) são propostos.</p>',
+            hKeysT: 'Teclado',
+            hKeysB: '<p>Cinco atalhos aparecem <b>sem teclas</b> em Definições › Atalhos de teclado, para não tirar nenhuma a outro script. Atribua lá os que quiser.</p>',
+            hSafeB: 'O script nunca altera o mapa: nada entra no histórico de anular.',
         },
         he: {
-            goTo: 'לצומת', goToChain: 'עבור אל',
-            fit: 'הכל', mid: 'אמצע', back: 'חזרה',
+            lblNode: 'צומת', lblEnds: 'קצוות',
             tipA: 'מרכז את המפה על צומת A (תחילת המקטע)',
             tipB: 'מרכז את המפה על צומת B (סוף המקטע)',
             tipE1: 'מרכז את המפה על הקצה הראשון של השרשרת הנבחרת',
             tipE2: 'מרכז את המפה על הקצה השני של השרשרת הנבחרת',
-            tipFit: 'זום להצגת כל הבחירה',
-            tipMid: 'מרכז את המפה על אמצע הבחירה',
+            tipFit: 'הכל: זום להצגת כל הבחירה',
+            tipMid: 'אמצע: מרכז את המפה על אמצע הבחירה',
             tipBack: 'חזרה למקום שבו היית קודם',
-            tipBackNone: 'עדיין אין מיקום לחזור אליו',
+            tipBackNone: 'חזרה: עדיין אין מיקום לחזור אליו',
             scA: 'קפיצה לצומת A (או לקצה הראשון של השרשרת הנבחרת)',
             scB: 'קפיצה לצומת B (או לקצה השני של השרשרת הנבחרת)',
             scFit: 'הצגת המקטעים הנבחרים במלואם',
             scMid: 'קפיצה לאמצע הבחירה',
             scBack: 'חזרה למיקום שלפני הקפיצה',
-            pHover: 'הצג את הסרגל במעבר מעל המקטעים הנבחרים',
-            pHoverHelp: 'עצרו את הסמן על מקטע נבחר: סרגל קטן מופיע לידו. Esc סוגר אותו.',
-            pKeys: 'קיצורי המקלדת מופיעים, ללא מקשים, בהגדרות › קיצורי מקלדת — הקצו שם את אלה שתרצו.',
+            sbHint: 'קפיצה לאחד מקצות המקטע הנבחר, לאמצעו, או הצגתו במלואו — וחזרה.',
+            sbHover: 'סרגל במעבר עכבר',
+            sbHoverHint: 'עצרו את הסמן על מקטע נבחר: הסרגל מופיע לידו.',
+            sbHelp: 'עזרה',
+            hPanelT: 'הכפתורים',
+            hPanelB: '<table class="wjn-help-table"><tr><td><b>A</b> · <b>B</b></td><td>מרכז את המפה על צומת A או B של המקטע הנבחר. הזום נשמר.</td></tr><tr><td><b>&#x26F6;</b></td><td>זום כך שכל הבחירה תיכנס למסך.</td></tr><tr><td><b>&#x25CE;</b></td><td>מרכז על האמצע, הנמדד לאורך הדרך.</td></tr><tr><td><b>&#x21A9;</b></td><td>חזרה לתצוגה שלפני התזוזה הראשונה: A, אחר כך B, אחר כך חזרה — מחזיר לנקודת המוצא.</td></tr></table>',
+            hHoverT: 'במעבר עכבר',
+            hHoverB: '<p>עצרו לרגע את הסמן על מקטע נבחר: אותם כפתורים מופיעים לידו. לחיצה, התרחקות, הזזת המפה או <kbd>Esc</kbd> סוגרים אותם.</p><p>הם לעולם לא נפתחים בזמן ציור או גרירה.</p>',
+            hMultiT: 'כמה מקטעים',
+            hMultiB: '<p>אם המקטעים הנבחרים רציפים, <b>&#x21E4;</b> ו-<b>&#x21E5;</b> מובילים לשני קצות השרשרת, ו-&#x25CE; לאמצעה.</p><p>אחרת מוצעים רק &#x26F6; ו-&#x25CE; (מרכז האזור).</p>',
+            hKeysT: 'מקלדת',
+            hKeysB: '<p>חמישה קיצורים מופיעים <b>ללא מקשים</b> בהגדרות › קיצורי מקלדת, כדי לא לקחת מקש מסקריפט אחר. הקצו שם את אלה שתרצו.</p>',
+            hSafeB: 'הסקריפט לעולם אינו משנה את המפה: דבר אינו נכנס להיסטוריית הביטול.',
         },
-    };
-
-    // Seul « br » distingue le portugais brésilien ; d'anciens navigateurs rendent encore
-    // « iw » pour l'hébreu.
-    const detectLang = () => {
-        try {
-            const l = (window.W?.userscripts?.state?.locale || document.documentElement.lang || navigator.language || 'en').toLowerCase();
-            if (l.startsWith('pt')) return l.includes('br') ? 'pt-BR' : 'pt-PT';
-            if (l.startsWith('he') || l.startsWith('iw')) return 'he';
-            return ['fr', 'de', 'es', 'it', 'en'].find(c => l.startsWith(c)) || 'en';
-        } catch (e) { return 'en'; }
     };
     let _lang = 'en';
     const t = key => (DICO[_lang] && DICO[_lang][key]) || DICO.en[key] || key;
@@ -430,61 +491,136 @@
     }
 
     // =====================================================================
-    //  Les boutons — un seul gabarit pour le panneau et la barre de survol
+    //  Apparence — mêmes jetons, même typo et mêmes gabarits que WME Closures Toolkit,
+    //  pour que les scripts de la famille se lisent d'un coup d'œil
     // =====================================================================
 
+    // Préfixe propre (--wjn-*) : les valeurs sont celles de WCT, mais les deux scripts
+    // cohabitent sans que l'un dépende des variables de l'autre.
+    // ⚠️ Pas d'accent grave dans ce bloc : il vit dans un template literal.
     const CSS = `
-#${BAR_ID} { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; padding: 4px 16px 6px; }
-#${BAR_ID} .wjn-lbl { font-size: 12px; color: var(--content_p2, #6a7075); margin-inline-end: 2px; }
-#${BAR_ID} .wjn-back { margin-inline-start: auto; }
-#${BAR_ID} .wjn-br { flex-basis: 100%; height: 0; }
-#${POP_ID} { position: fixed; z-index: 10050; display: flex; align-items: center; gap: 4px; padding: 4px;
-  background: var(--background_default, #fff); border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, .28); }
+:root {
+    --wjn-blue: #2196f3; --wjn-blue-dk: #1565c0; --wjn-grey: #9e9e9e;
+    --wjn-surface: #ffffff; --wjn-bg: #f5f7f9; --wjn-border: #dde3ea;
+    --wjn-text: #2d3748; --wjn-text2: #566372;
+    --wjn-radius: 8px; --wjn-shadow: 0 8px 32px rgba(0,0,0,.22), 0 2px 8px rgba(0,0,0,.12);
+}
+.wjn-row { display: flex; align-items: center; gap: 4px; font-family: 'Rubik','Open Sans',sans-serif; font-size: 12px; }
+#${BAR_ID} { padding: 4px 16px 6px; }
+.wjn-lbl {
+    font-size: 10px; font-weight: 600; color: var(--wjn-text2);
+    text-transform: uppercase; letter-spacing: .04em; margin-inline-end: 2px; white-space: nowrap;
+}
+.wjn-sep { width: 1px; height: 14px; background: var(--wjn-border); margin: 0 3px; flex-shrink: 0; }
+/* Pastille ronde de 22 px : le gabarit des jours de WCT. WME impose height:32px à tout
+   bouton, d'où la hauteur et le padding remis à plat. */
+.wjn-chip {
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    width: 22px; height: 22px; min-height: 0; padding: 0; margin: 0;
+    font-family: inherit; font-size: 11px; font-weight: 700; line-height: 1;
+    border-radius: 50%; border: 1px solid var(--wjn-border);
+    background: var(--wjn-surface); color: var(--wjn-blue-dk); cursor: pointer; user-select: none;
+    transition: background .12s, color .12s, border-color .12s, transform .1s;
+}
+.wjn-chip:hover { background: var(--wjn-blue); border-color: var(--wjn-blue); color: #fff; }
+.wjn-chip:active { transform: scale(.92); }
+.wjn-chip.wjn-ico { font-size: 13px; color: var(--wjn-text2); }
+.wjn-chip.wjn-ico:hover { color: #fff; }
+.wjn-chip[disabled] { opacity: .4; cursor: not-allowed; pointer-events: none; }
+.wjn-back { margin-inline-start: auto; }
+.wjn-chip:focus-visible, #wjn-sidebar :focus-visible { outline: 2px solid var(--wjn-blue); outline-offset: 1px; }
+/* Barre de survol : les mêmes pastilles dans une carte flottante. Posée sur le body, jamais
+   dans un conteneur positionné de WME — elle passerait sous la carte. */
+#${POP_ID} {
+    position: fixed; z-index: 10050; padding: 4px 6px;
+    background: var(--wjn-surface); border: 1px solid var(--wjn-border);
+    border-radius: 50px; box-shadow: var(--wjn-shadow);
+}
 #${POP_ID}[hidden] { display: none !important; }
-#${POP_ID} .wjn-sep { width: 1px; align-self: stretch; margin: 2px 2px; background: var(--hairline, #d5d7db); }
-#wjn-pane label { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; }
-#wjn-pane p { font-size: 12px; color: var(--content_p2, #6a7075); margin: 6px 0 0; }
+#${POP_ID} .wjn-back { margin-inline-start: 0; }
+/* Onglet Scripts — calqué sur #wct-sidebar */
+#wjn-sidebar { padding: 10px 12px; font-family: 'Rubik','Open Sans',sans-serif; font-size: 12px; color: var(--wjn-text); }
+#wjn-sidebar h2 { font-size: 13px; font-weight: 700; color: var(--wjn-blue); margin: 0 0 8px; }
+#wjn-sidebar h2 span { font-size: 11px; font-weight: 400; color: var(--wjn-grey); }
+.wjn-sb-hint { font-size: 11px; color: var(--wjn-text2); line-height: 1.6; margin: 0; }
+.wjn-sb-sec { font-size: 11px; font-weight: 700; color: var(--wjn-blue); text-transform: uppercase; letter-spacing: .05em; margin: 14px 0 6px; }
+.wjn-toggle-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+.wjn-toggle-row > span { font-size: 13px; font-weight: 600; }
+.wjn-toggle { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+.wjn-toggle input { opacity: 0; width: 0; height: 0; }
+.wjn-toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #ccc; border-radius: 50px; transition: background .2s; }
+.wjn-toggle-slider:before { content: ''; position: absolute; width: 14px; height: 14px; inset-inline-start: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: transform .2s; }
+.wjn-toggle input:checked + .wjn-toggle-slider { background: var(--wjn-blue); }
+.wjn-toggle input:checked + .wjn-toggle-slider:before { transform: translateX(16px); }
+#wjn-sidebar[dir="rtl"] .wjn-toggle input:checked + .wjn-toggle-slider:before { transform: translateX(-16px); }
+.wjn-help-section { border: 1px solid var(--wjn-border); border-radius: var(--wjn-radius); margin-bottom: 4px; overflow: hidden; }
+.wjn-help-hdr {
+    display: flex; align-items: center; justify-content: space-between; width: 100%;
+    height: auto; min-height: 0; margin: 0; border: none; font-family: inherit; text-align: start;
+    padding: 5px 9px; font-size: 11px; font-weight: 700;
+    cursor: pointer; background: var(--wjn-bg); color: var(--wjn-text); user-select: none;
+}
+.wjn-help-hdr.on { color: var(--wjn-blue); background: #e3f2fd; }
+.wjn-help-hdr:hover { background: #eef4fb; }
+.wjn-help-body { padding: 7px 9px; font-size: 11px; line-height: 1.5; color: var(--wjn-text); }
+.wjn-help-body p { margin: 0 0 5px; }
+.wjn-help-table { width: 100%; border-collapse: collapse; }
+.wjn-help-table td { padding: 3px 5px; vertical-align: top; border-bottom: 1px solid var(--wjn-border); }
+.wjn-help-table td:first-child { width: 44px; white-space: nowrap; color: var(--wjn-text2); }
+/* WME impose un texte BLANC à la balise kbd. */
+#wjn-sidebar kbd {
+    display: inline-block; background: var(--wjn-bg); color: var(--wjn-text);
+    border: 1px solid var(--wjn-border); border-bottom-width: 2px; border-radius: 3px;
+    padding: 0 4px; font-family: ui-monospace,Menlo,Consolas,monospace; font-size: 10px; line-height: 1.5;
+}
+.wjn-sb-foot { margin-top: 12px; font-size: 11px; color: var(--wjn-grey); line-height: 1.6; }
 `;
 
-    // Le libellé d'un bouton d'extrémité change avec la sélection : A/B pour un segment,
-    // ⇤/⇥ pour une chaîne — un « nœud A » de chaîne ne correspondrait à rien dans WME.
-    const bouton = (q, txt, cls) => '<wz-button size="sm" color="' + (cls || 'secondary') + '" data-wjn="' + q + '">' + txt + '</wz-button>';
+    // =====================================================================
+    //  Les pastilles — un seul gabarit pour le panneau et la barre de survol
+    // =====================================================================
 
-    function boutonsExtremites(c) {
-        return c.A ? bouton('A', c.unique ? 'A' : '&#x21E4;') + bouton('B', c.unique ? 'B' : '&#x21E5;') : '';
+    const chip = (q, txt, ico) => '<button type="button" class="wjn-chip' + (ico ? ' wjn-ico' : '') + '" data-wjn="' + q + '">' + txt + '</button>';
+
+    // Les extrémités s'appellent A/B pour un segment, ⇤/⇥ pour une chaîne : un « nœud A » de
+    // chaîne ne correspondrait à rien dans WME.
+    function rangee(c, avecLibelle) {
+        let h = '';
+        if (c.A) {
+            if (avecLibelle) h += '<span class="wjn-lbl">' + (c.unique ? t('lblNode') : t('lblEnds')) + '</span>';
+            h += chip('A', c.unique ? 'A' : '&#x21E4;') + chip('B', c.unique ? 'B' : '&#x21E5;') + '<span class="wjn-sep"></span>';
+        }
+        h += chip('fit', '&#x26F6;', true) + chip('mid', '&#x25CE;', true);
+        return h;
     }
 
-    function boutonsVues(compact) {
-        return bouton('fit', compact ? '&#x26F6;' : '&#x26F6; <span data-lbl="fit"></span>') +
-            bouton('mid', compact ? '&#x25CE;' : '&#x25CE; <span data-lbl="mid"></span>');
-    }
+    const chipRetour = () => '<button type="button" class="wjn-chip wjn-ico wjn-back" data-wjn="back">&#x21A9;</button>';
 
     function titrer(racine, c) {
         const tips = { A: c.unique ? 'tipA' : 'tipE1', B: c.unique ? 'tipB' : 'tipE2', fit: 'tipFit', mid: 'tipMid' };
         for (const [q, k] of Object.entries(tips)) {
             const el = racine.querySelector('[data-wjn="' + q + '"]');
-            if (el) el.title = t(k);
+            if (el) { el.title = t(k); el.setAttribute('aria-label', t(k)); }
         }
-        racine.querySelectorAll('[data-lbl]').forEach(el => { el.textContent = t(el.getAttribute('data-lbl')); });
         const bk = racine.querySelector('[data-wjn="back"]');
         if (bk) {
             bk.title = retour ? t('tipBack') : t('tipBackNone');
-            if (retour) bk.removeAttribute('disabled'); else bk.setAttribute('disabled', '');
+            bk.setAttribute('aria-label', bk.title);
+            bk.disabled = !retour;
         }
     }
 
     function ecouterClics(racine, apres) {
         racine.addEventListener('click', ev => {
             const b = ev.target.closest('[data-wjn]');
-            if (!b || b.hasAttribute('disabled')) return;
+            if (!b || b.disabled) return;
             agir(b.getAttribute('data-wjn'));
             if (apres) apres();
         });
     }
 
     // =====================================================================
-    //  La barre du panneau, sous l'en-tête du segment
+    //  La barre du panneau, sous l'en-tête du segment — une seule ligne
     // =====================================================================
 
     let signatureBarre = '';
@@ -503,18 +639,13 @@
         const existante = document.getElementById(BAR_ID);
         const c = entete ? cibles() : null;
         if (!c) { if (existante) existante.remove(); signatureBarre = ''; return; }
-        const sig = (c.unique ? 'u' : 'm') + (c.A ? 'c' : '-');
+        const sig = _lang + (c.unique ? 'u' : 'm') + (c.A ? 'c' : '-');
         if (existante && existante.previousElementSibling === entete && sig === signatureBarre) { titrer(existante, c); return; }
         if (existante) existante.remove();
         const bar = document.createElement('div');
         bar.id = BAR_ID;
-        // Deux lignes quand il y a des extrémités : « aller à » et « revenir » en haut, les vues
-        // en dessous — sur une seule ligne, la largeur du panneau coupe au hasard.
-        const retourHTML = '<wz-button size="sm" color="text" class="wjn-back" data-wjn="back">&#x21A9; <span data-lbl="back"></span></wz-button>';
-        bar.innerHTML = c.A
-            ? '<span class="wjn-lbl">' + (c.unique ? t('goTo') : t('goToChain')) + '</span>' + boutonsExtremites(c) + retourHTML +
-              '<span class="wjn-br"></span>' + boutonsVues(false)
-            : boutonsVues(false) + retourHTML;
+        bar.className = 'wjn-row';
+        bar.innerHTML = rangee(c, true) + chipRetour();
         ecouterClics(bar);
         entete.after(bar);
         signatureBarre = sig;
@@ -566,13 +697,15 @@
         if (!pop) {
             pop = document.createElement('div');
             pop.id = POP_ID;
+            pop.className = 'wjn-row';
             pop.setAttribute('role', 'toolbar');
             ecouterClics(pop, cacherPop);
             pop.addEventListener('mouseenter', () => clearTimeout(masquageTimer));
             pop.addEventListener('mouseleave', () => { masquageTimer = setTimeout(cacherPop, HIDE_GRACE); });
             document.body.appendChild(pop);
         }
-        pop.innerHTML = boutonsExtremites(c) + boutonsVues(true) + (retour ? '<span class="wjn-sep"></span><wz-button size="sm" color="text" data-wjn="back">&#x21A9;</wz-button>' : '');
+        pop.dir = _lang === 'he' ? 'rtl' : 'ltr';
+        pop.innerHTML = rangee(c, false) + (retour ? '<span class="wjn-sep"></span>' + chipRetour() : '');
         titrer(pop, c);
         pop.hidden = false;
         // Décalée en bas à droite du pointeur, et ramenée dans la fenêtre si besoin : la barre
@@ -624,20 +757,54 @@
     }
 
     // =====================================================================
-    //  Onglet Scripts et raccourcis
+    //  Onglet Scripts — même ossature que celui de WCT
     // =====================================================================
+
+    const AIDE = [
+        { id: 'panel', t: 'hPanelT', b: 'hPanelB' },
+        { id: 'hover', t: 'hHoverT', b: 'hHoverB' },
+        { id: 'multi', t: 'hMultiT', b: 'hMultiB' },
+        { id: 'keys', t: 'hKeysT', b: 'hKeysB' },
+    ];
+
+    const construireOnglet = () => `
+<div id="wjn-sidebar" dir="${_lang === 'he' ? 'rtl' : 'ltr'}">
+    <h2>&#x21E4;&#x21E5; ${SCRIPT_NAME} <span>v${VERSION}</span></h2>
+    <p class="wjn-sb-hint">${t('sbHint')}</p>
+    <div class="wjn-toggle-row">
+        <span>${t('sbHover')}</span>
+        <label class="wjn-toggle">
+            <input type="checkbox" id="wjn-survol" ${opts.survol ? 'checked' : ''}>
+            <span class="wjn-toggle-slider"></span>
+        </label>
+    </div>
+    <p class="wjn-sb-hint" style="margin-top:4px">${t('sbHoverHint')}</p>
+    <div class="wjn-sb-sec">&#x2753; ${t('sbHelp')}</div>
+    ${AIDE.map((s, i) => `
+    <div class="wjn-help-section">
+        <button type="button" class="wjn-help-hdr${i === 0 ? ' on' : ''}" data-aide="${s.id}" aria-expanded="${i === 0}">${t(s.t)} <span>${i === 0 ? '&#x25BC;' : '&#x25B6;'}</span></button>
+        <div class="wjn-help-body" data-corps="${s.id}"${i === 0 ? '' : ' hidden'}>${t(s.b)}</div>
+    </div>`).join('')}
+    <p class="wjn-sb-foot">&#x1F512; ${t('hSafeB')}</p>
+</div>`;
 
     async function poserOnglet() {
         try {
             const res = await sdk.Sidebar.registerScriptTab();
             res.tabLabel.innerHTML = '<span title="' + SCRIPT_NAME + '" style="font-size:15px">&#x21E4;&#x21E5;</span>';
-            res.tabPane.innerHTML =
-                '<div id="wjn-pane"><h4>' + SCRIPT_NAME + ' <small>' + VERSION + '</small></h4>' +
-                '<label><input type="checkbox" id="wjn-survol"> <span>' + t('pHover') + '</span></label>' +
-                '<p>' + t('pHoverHelp') + '</p><p>' + t('pKeys') + '</p></div>';
+            res.tabPane.innerHTML = construireOnglet();
             const cb = res.tabPane.querySelector('#wjn-survol');
-            cb.checked = opts.survol;
             cb.addEventListener('change', () => { opts.survol = cb.checked; ecrireOpts(); if (!opts.survol) cacherPop(); });
+            res.tabPane.addEventListener('click', ev => {
+                const h = ev.target.closest('[data-aide]');
+                if (!h) return;
+                const corps = res.tabPane.querySelector('[data-corps="' + h.getAttribute('data-aide') + '"]');
+                const ouvrir = corps.hidden;
+                corps.hidden = !ouvrir;
+                h.classList.toggle('on', ouvrir);
+                h.setAttribute('aria-expanded', String(ouvrir));
+                h.querySelector('span').innerHTML = ouvrir ? '&#x25BC;' : '&#x25B6;';
+            });
         } catch (e) { log('onglet : ' + e.message); }
     }
 
