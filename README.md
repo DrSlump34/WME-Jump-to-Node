@@ -1,5 +1,7 @@
 # WME Jump to Node (WJN)
 
+<img src="icon-128.png" width="96" align="right" alt="">
+
 Sur un long segment, l'une des extrémités est souvent hors de l'écran. WJN centre la carte sur le
 **nœud A** ou le **nœud B** du segment sélectionné, sur son **milieu**, ou le **cadre en entier**, puis
 **ramène** à la position de départ.
@@ -8,6 +10,8 @@ Né d'une demande restée sans réponse sur le Discord *Waze Scripts* (`#script-
 KuniaKid, 07/05/2026). Le seul script qui le faisait
 ([439269](https://greasyfork.org/scripts/439269), 2022) s'appuie sur des API internes retirées
 depuis.
+
+![Le panneau du segment et la barre au survol](capture_0.04.00_survol.png)
 
 ## Trois façons de s'en servir
 
@@ -35,3 +39,9 @@ La barre de survol se désactive dans l'onglet Scripts (🎯).
 
 Aucune modification de la carte : aucune action n'entre dans la pile d'annulation (contrôlé par
 `W.model.actionManager.getActions().length`, resté à 0 sur tous les essais).
+
+## Installation
+
+Depuis GreasyFork (Tampermonkey ou Violentmonkey). Licence MIT.
+
+<img src="capture_0.04.00_onglet.png" width="260" alt="L'onglet Scripts : réglage et aide">
