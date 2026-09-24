@@ -128,7 +128,7 @@ version : elle ne se remplace qu'en publiant) et le **post Discuss** d'annonce.
 ## L'icône embarquée dans l'en-tête
 
 Le `@icon` du `.user.js` est un SVG autonome : squircle bleu en dégradé, segment
-blanc, nœud d'arrivée orange. C'est **elle** que Tampermonkey et GreasyFork affichent
-en petit, et c'est **la même** qui sert d'onglet dans le panneau Scripts de WME. Elle
+blanc, arc pointillé qui saute vers le nœud d'arrivée orange. C'est **elle** que Tampermonkey
+et GreasyFork affichent en petit ; l'onglet du panneau Scripts de WME porte, lui, l'emoji 🎯. Elle
 n'a pas besoin du générateur d'images : elle reste nette à toute taille. L'image
 produite par ce prompt sert aux **vitrines** (GitHub, GreasyFork, Discuss).

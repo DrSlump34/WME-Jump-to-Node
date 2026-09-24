@@ -24,7 +24,7 @@ bouts de la chaîne et « Milieu » le milieu de la chaîne. Sinon, seuls « Tou
 **Revenir** ramène à la vue d'avant le **premier** déplacement : A puis B puis Revenir ramène au
 point de départ.
 
-La barre de survol se désactive dans l'onglet Scripts (icône ⇤⇥).
+La barre de survol se désactive dans l'onglet Scripts (🎯).
 
 ## Ce qu'il ne fait jamais
 
