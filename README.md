@@ -42,6 +42,6 @@ Aucune modification de la carte : aucune action n'entre dans la pile d'annulatio
 
 ## Installation
 
-Depuis GreasyFork (Tampermonkey ou Violentmonkey). Licence MIT.
+Depuis [GreasyFork](https://greasyfork.org/scripts/597298-wme-jump-to-node) (Tampermonkey ou Violentmonkey) : les mises à jour arrivent ensuite toutes seules. Discussion, retours et idées : [fil Discuss](https://www.waze.com/discuss/t/script-wme-jump-to-node/412995). Licence MIT.
 
 <img src="capture_0.04.00_onglet.png" width="260" alt="L'onglet Scripts : réglage et aide">
