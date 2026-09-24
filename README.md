@@ -17,8 +17,8 @@ depuis.
 | **Au survol** d'un segment sélectionné | une petite barre apparaît près du pointeur après ~350 ms d'arrêt ; Échap la ferme |
 | **Clavier** | cinq raccourcis déclarés **sans touches** dans Paramètres › Raccourcis clavier |
 
-**Plusieurs segments sélectionnés** : s'ils se suivent (chemin simple), A et B deviennent les deux
-bouts de la chaîne (⇤ ⇥) et « Milieu » le milieu de la chaîne. Sinon, seuls « Tout voir » et
+**Plusieurs segments sélectionnés** : s'ils se suivent (chemin simple), A et B mènent aux deux
+bouts de la chaîne et « Milieu » le milieu de la chaîne. Sinon, seuls « Tout voir » et
 « Milieu » (centre de l'emprise) sont proposés.
 
 **Revenir** ramène à la vue d'avant le **premier** déplacement : A puis B puis Revenir ramène au

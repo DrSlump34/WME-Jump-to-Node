@@ -9,7 +9,7 @@
 // @name:he      WME Jump to Node
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgdmlld0JveD0nMCAwIDY0IDY0Jz48cmVjdCB3aWR0aD0nNjQnIGhlaWdodD0nNjQnIHJ4PScxMicgZmlsbD0nIzE1NjVjMCcvPjxwYXRoIGQ9J00xMiA0OCBDMjQgNDYgMzAgMjAgNTAgMTYnIGZpbGw9J25vbmUnIHN0cm9rZT0nI2ZmZmZmZicgc3Ryb2tlLXdpZHRoPSc1JyBzdHJva2UtbGluZWNhcD0ncm91bmQnLz48Y2lyY2xlIGN4PScxMicgY3k9JzQ4JyByPSc2JyBmaWxsPScjZmZmZmZmJy8+PGNpcmNsZSBjeD0nNTAnIGN5PScxNicgcj0nOScgZmlsbD0nbm9uZScgc3Ryb2tlPScjZmI4YzAwJyBzdHJva2Utd2lkdGg9JzQnLz48Y2lyY2xlIGN4PSc1MCcgY3k9JzE2JyByPSc0JyBmaWxsPScjZmI4YzAwJy8+PC9zdmc+Cg==
 // @namespace    https://github.com/DrSlump34
-// @version      0.03.01
+// @version      0.03.02
 // @description  Jump to either end of the selected segment, to its middle, or fit it on screen — from the segment panel, from a small toolbar that appears when you hover the selection, or by keyboard. A Back button returns you where you were.
 // @description:fr Sauter à l'une ou l'autre extrémité du segment sélectionné, à son milieu, ou l'afficher en entier — depuis le panneau du segment, depuis une petite barre qui apparaît au survol de la sélection, ou au clavier. Un bouton Revenir vous ramène d'où vous veniez.
 // @description:de Springen Sie zu einem Ende des ausgewählten Segments, zu seiner Mitte, oder zeigen Sie es ganz an — über den Segmentbereich, über eine kleine Leiste, die beim Überfahren der Auswahl erscheint, oder per Tastatur. Eine Zurück-Schaltfläche bringt Sie zurück.
@@ -77,7 +77,7 @@
 
     const DICO = {
         en: {
-            lblNode: 'Node', lblEnds: 'Ends',
+            lblNode: 'Node',
             tipA: 'Center the map on node A (start of the segment)',
             tipB: 'Center the map on node B (end of the segment)',
             tipE1: 'Center the map on the first end of the selected chain',
@@ -100,13 +100,13 @@
             hHoverT: 'On hover',
             hHoverB: '<p>Rest the pointer on a selected segment for a moment: the same buttons appear next to it. Click, move away, move the map or press <kbd>Esc</kbd> to close them.</p><p>They never open while you draw or drag.</p>',
             hMultiT: 'Several segments',
-            hMultiB: '<p>If the selected segments follow one another, <b>&#x21E4;</b> and <b>&#x21E5;</b> jump to the two ends of the chain, and &#x25CE; to its middle.</p><p>If they do not, only &#x26F6; and &#x25CE; (center of the area) are offered.</p>',
+            hMultiB: '<p>If the selected segments follow one another, <b>A</b> and <b>B</b> jump to the two ends of the chain, and &#x25CE; to its middle.</p><p>If they do not, only &#x26F6; and &#x25CE; (center of the area) are offered.</p>',
             hKeysT: 'Keyboard',
             hKeysB: '<p>Five shortcuts are listed <b>without keys</b> under Settings › Keyboard shortcuts, so as not to take any from another script. Assign the ones you want there.</p>',
             hSafeB: 'The script never changes the map: nothing enters the undo stack.',
         },
         fr: {
-            lblNode: 'Nœud', lblEnds: 'Bouts',
+            lblNode: 'Nœud',
             tipA: 'Centrer la carte sur le nœud A (début du segment)',
             tipB: 'Centrer la carte sur le nœud B (fin du segment)',
             tipE1: 'Centrer la carte sur le premier bout de la chaîne sélectionnée',
@@ -129,13 +129,13 @@
             hHoverT: 'Au survol',
             hHoverB: '<p>Arrêtez un instant le pointeur sur un segment sélectionné : les mêmes boutons apparaissent à côté. Un clic, un écart, un déplacement de la carte ou <kbd>Échap</kbd> les referme.</p><p>Ils ne s\'ouvrent jamais pendant un tracé ou un glisser.</p>',
             hMultiT: 'Plusieurs segments',
-            hMultiB: '<p>Si les segments sélectionnés se suivent, <b>&#x21E4;</b> et <b>&#x21E5;</b> mènent aux deux bouts de la chaîne, et &#x25CE; à son milieu.</p><p>Sinon, seuls &#x26F6; et &#x25CE; (centre de l\'emprise) sont proposés.</p>',
+            hMultiB: '<p>Si les segments sélectionnés se suivent, <b>A</b> et <b>B</b> mènent aux deux bouts de la chaîne, et &#x25CE; à son milieu.</p><p>Sinon, seuls &#x26F6; et &#x25CE; (centre de l\'emprise) sont proposés.</p>',
             hKeysT: 'Clavier',
             hKeysB: '<p>Cinq raccourcis sont listés <b>sans touches</b> dans Paramètres › Raccourcis clavier, pour n\'en prendre aucune à un autre script. Attribuez-y ceux que vous voulez.</p>',
             hSafeB: 'Le script ne modifie jamais la carte : rien n\'entre dans la pile d\'annulation.',
         },
         de: {
-            lblNode: 'Knoten', lblEnds: 'Enden',
+            lblNode: 'Knoten',
             tipA: 'Karte auf Knoten A zentrieren (Anfang des Segments)',
             tipB: 'Karte auf Knoten B zentrieren (Ende des Segments)',
             tipE1: 'Karte auf das erste Ende der ausgewählten Kette zentrieren',
@@ -158,13 +158,13 @@
             hHoverT: 'Beim Überfahren',
             hHoverB: '<p>Den Zeiger kurz auf einem ausgewählten Segment ruhen lassen: dieselben Schaltflächen erscheinen daneben. Ein Klick, Wegbewegen, Verschieben der Karte oder <kbd>Esc</kbd> schließt sie.</p><p>Beim Zeichnen oder Ziehen öffnen sie sich nie.</p>',
             hMultiT: 'Mehrere Segmente',
-            hMultiB: '<p>Folgen die ausgewählten Segmente aufeinander, führen <b>&#x21E4;</b> und <b>&#x21E5;</b> zu den beiden Enden der Kette und &#x25CE; zu ihrer Mitte.</p><p>Sonst werden nur &#x26F6; und &#x25CE; (Mitte des Bereichs) angeboten.</p>',
+            hMultiB: '<p>Folgen die ausgewählten Segmente aufeinander, führen <b>A</b> und <b>B</b> zu den beiden Enden der Kette und &#x25CE; zu ihrer Mitte.</p><p>Sonst werden nur &#x26F6; und &#x25CE; (Mitte des Bereichs) angeboten.</p>',
             hKeysT: 'Tastatur',
             hKeysB: '<p>Fünf Tastenkürzel stehen <b>ohne Tasten</b> unter Einstellungen › Tastenkürzel, um keinem anderen Skript eine wegzunehmen. Dort nach Wunsch belegen.</p>',
             hSafeB: 'Das Skript ändert die Karte nie: nichts gelangt in den Rückgängig-Verlauf.',
         },
         es: {
-            lblNode: 'Nodo', lblEnds: 'Extremos',
+            lblNode: 'Nodo',
             tipA: 'Centrar el mapa en el nodo A (inicio del segmento)',
             tipB: 'Centrar el mapa en el nodo B (final del segmento)',
             tipE1: 'Centrar el mapa en el primer extremo de la cadena seleccionada',
@@ -187,13 +187,13 @@
             hHoverT: 'Al pasar el puntero',
             hHoverB: '<p>Detenga un momento el puntero sobre un segmento seleccionado: aparecen los mismos botones al lado. Un clic, alejarse, mover el mapa o <kbd>Esc</kbd> los cierra.</p><p>Nunca se abren mientras dibuja o arrastra.</p>',
             hMultiT: 'Varios segmentos',
-            hMultiB: '<p>Si los segmentos seleccionados se siguen, <b>&#x21E4;</b> y <b>&#x21E5;</b> llevan a los dos extremos de la cadena, y &#x25CE; a su punto medio.</p><p>Si no, solo se ofrecen &#x26F6; y &#x25CE; (centro del área).</p>',
+            hMultiB: '<p>Si los segmentos seleccionados se siguen, <b>A</b> y <b>B</b> llevan a los dos extremos de la cadena, y &#x25CE; a su punto medio.</p><p>Si no, solo se ofrecen &#x26F6; y &#x25CE; (centro del área).</p>',
             hKeysT: 'Teclado',
             hKeysB: '<p>Cinco atajos aparecen <b>sin teclas</b> en Ajustes › Atajos de teclado, para no quitarle ninguna a otro script. Asigne allí los que quiera.</p>',
             hSafeB: 'El script nunca modifica el mapa: nada entra en el historial de deshacer.',
         },
         it: {
-            lblNode: 'Nodo', lblEnds: 'Estremi',
+            lblNode: 'Nodo',
             tipA: 'Centra la mappa sul nodo A (inizio del segmento)',
             tipB: 'Centra la mappa sul nodo B (fine del segmento)',
             tipE1: 'Centra la mappa sul primo estremo della catena selezionata',
@@ -216,13 +216,13 @@
             hHoverT: 'Al passaggio',
             hHoverB: '<p>Fermate un attimo il puntatore su un segmento selezionato: accanto appaiono gli stessi pulsanti. Un clic, allontanarsi, spostare la mappa o <kbd>Esc</kbd> li chiude.</p><p>Non si aprono mai mentre si disegna o si trascina.</p>',
             hMultiT: 'Più segmenti',
-            hMultiB: '<p>Se i segmenti selezionati si susseguono, <b>&#x21E4;</b> e <b>&#x21E5;</b> portano ai due estremi della catena, e &#x25CE; al suo punto medio.</p><p>Altrimenti sono proposti solo &#x26F6; e &#x25CE; (centro dell\'area).</p>',
+            hMultiB: '<p>Se i segmenti selezionati si susseguono, <b>A</b> e <b>B</b> portano ai due estremi della catena, e &#x25CE; al suo punto medio.</p><p>Altrimenti sono proposti solo &#x26F6; e &#x25CE; (centro dell\'area).</p>',
             hKeysT: 'Tastiera',
             hKeysB: '<p>Cinque scorciatoie sono elencate <b>senza tasti</b> in Impostazioni › Scorciatoie da tastiera, per non toglierne a un altro script. Assegnate lì quelle che volete.</p>',
             hSafeB: 'Lo script non modifica mai la mappa: nulla entra nella cronologia di annullamento.',
         },
         'pt-BR': {
-            lblNode: 'Nó', lblEnds: 'Pontas',
+            lblNode: 'Nó',
             tipA: 'Centralizar o mapa no nó A (início do segmento)',
             tipB: 'Centralizar o mapa no nó B (fim do segmento)',
             tipE1: 'Centralizar o mapa na primeira ponta da cadeia selecionada',
@@ -245,13 +245,13 @@
             hHoverT: 'Ao passar o mouse',
             hHoverB: '<p>Pare o ponteiro um instante sobre um segmento selecionado: os mesmos botões aparecem ao lado. Um clique, afastar-se, mover o mapa ou <kbd>Esc</kbd> os fecha.</p><p>Nunca abrem durante um desenho ou um arrasto.</p>',
             hMultiT: 'Vários segmentos',
-            hMultiB: '<p>Se os segmentos selecionados se seguem, <b>&#x21E4;</b> e <b>&#x21E5;</b> levam às duas pontas da cadeia, e &#x25CE; ao meio dela.</p><p>Caso contrário, só &#x26F6; e &#x25CE; (centro da área) são oferecidos.</p>',
+            hMultiB: '<p>Se os segmentos selecionados se seguem, <b>A</b> e <b>B</b> levam às duas pontas da cadeia, e &#x25CE; ao meio dela.</p><p>Caso contrário, só &#x26F6; e &#x25CE; (centro da área) são oferecidos.</p>',
             hKeysT: 'Teclado',
             hKeysB: '<p>Cinco atalhos aparecem <b>sem teclas</b> em Configurações › Atalhos de teclado, para não tirar nenhuma de outro script. Atribua lá os que quiser.</p>',
             hSafeB: 'O script nunca altera o mapa: nada entra no histórico de desfazer.',
         },
         'pt-PT': {
-            lblNode: 'Nó', lblEnds: 'Extremos',
+            lblNode: 'Nó',
             tipA: 'Centrar o mapa no nó A (início do segmento)',
             tipB: 'Centrar o mapa no nó B (fim do segmento)',
             tipE1: 'Centrar o mapa na primeira extremidade da cadeia selecionada',
@@ -274,13 +274,13 @@
             hHoverT: 'Ao passar o rato',
             hHoverB: '<p>Pare o ponteiro um instante sobre um segmento selecionado: os mesmos botões aparecem ao lado. Um clique, afastar-se, mover o mapa ou <kbd>Esc</kbd> fecha-os.</p><p>Nunca abrem durante um desenho ou um arrasto.</p>',
             hMultiT: 'Vários segmentos',
-            hMultiB: '<p>Se os segmentos selecionados se seguem, <b>&#x21E4;</b> e <b>&#x21E5;</b> levam às duas extremidades da cadeia, e &#x25CE; ao meio.</p><p>Caso contrário, só &#x26F6; e &#x25CE; (centro da área) são propostos.</p>',
+            hMultiB: '<p>Se os segmentos selecionados se seguem, <b>A</b> e <b>B</b> levam às duas extremidades da cadeia, e &#x25CE; ao meio.</p><p>Caso contrário, só &#x26F6; e &#x25CE; (centro da área) são propostos.</p>',
             hKeysT: 'Teclado',
             hKeysB: '<p>Cinco atalhos aparecem <b>sem teclas</b> em Definições › Atalhos de teclado, para não tirar nenhuma a outro script. Atribua lá os que quiser.</p>',
             hSafeB: 'O script nunca altera o mapa: nada entra no histórico de anular.',
         },
         he: {
-            lblNode: 'צומת', lblEnds: 'קצוות',
+            lblNode: 'צומת',
             tipA: 'מרכז את המפה על צומת A (תחילת המקטע)',
             tipB: 'מרכז את המפה על צומת B (סוף המקטע)',
             tipE1: 'מרכז את המפה על הקצה הראשון של השרשרת הנבחרת',
@@ -303,7 +303,7 @@
             hHoverT: 'במעבר עכבר',
             hHoverB: '<p>עצרו לרגע את הסמן על מקטע נבחר: אותם כפתורים מופיעים לידו. לחיצה, התרחקות, הזזת המפה או <kbd>Esc</kbd> סוגרים אותם.</p><p>הם לעולם לא נפתחים בזמן ציור או גרירה.</p>',
             hMultiT: 'כמה מקטעים',
-            hMultiB: '<p>אם המקטעים הנבחרים רציפים, <b>&#x21E4;</b> ו-<b>&#x21E5;</b> מובילים לשני קצות השרשרת, ו-&#x25CE; לאמצעה.</p><p>אחרת מוצעים רק &#x26F6; ו-&#x25CE; (מרכז האזור).</p>',
+            hMultiB: '<p>אם המקטעים הנבחרים רציפים, <b>A</b> ו-<b>B</b> מובילים לשני קצות השרשרת, ו-&#x25CE; לאמצעה.</p><p>אחרת מוצעים רק &#x26F6; ו-&#x25CE; (מרכז האזור).</p>',
             hKeysT: 'מקלדת',
             hKeysB: '<p>חמישה קיצורים מופיעים <b>ללא מקשים</b> בהגדרות › קיצורי מקלדת, כדי לא לקחת מקש מסקריפט אחר. הקצו שם את אלה שתרצו.</p>',
             hSafeB: 'הסקריפט לעולם אינו משנה את המפה: דבר אינו נכנס להיסטוריית הביטול.',
@@ -593,13 +593,13 @@
 
     const chip = (q, txt, ico) => '<button type="button" class="wjn-chip' + (ico ? ' wjn-ico' : '') + '" data-wjn="' + q + '">' + txt + '</button>';
 
-    // Les extrémités s'appellent A/B pour un segment, ⇤/⇥ pour une chaîne : un « nœud A » de
-    // chaîne ne correspondrait à rien dans WME.
+    // Pour une chaîne, A et B désignent ses deux bouts : le premier est du côté du premier
+    // segment sélectionné.
     function rangee(c, avecLibelle) {
         let h = '';
         if (c.A) {
-            if (avecLibelle) h += '<span class="wjn-lbl">' + (c.unique ? t('lblNode') : t('lblEnds')) + '</span>';
-            h += chip('A', c.unique ? 'A' : '&#x21E4;') + chip('B', c.unique ? 'B' : '&#x21E5;') + '<span class="wjn-sep"></span>';
+            if (avecLibelle) h += '<span class="wjn-lbl">' + t('lblNode') + '</span>';
+            h += chip('A', 'A') + chip('B', 'B') + '<span class="wjn-sep"></span>';
         }
         h += chip('fit', '&#x26F6;', true) + chip('mid', '&#x25CE;', true);
         return h;
