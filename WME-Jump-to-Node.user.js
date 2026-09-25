@@ -9,7 +9,7 @@
 // @name:he      WME Jump to Node
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgdmlld0JveD0nMCAwIDY0IDY0Jz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9J2cnIHgxPScwJyB5MT0nMCcgeDI9JzEnIHkyPScxJz48c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMxZTg4ZTUnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyMxNTY1YzAnLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0nNjQnIGhlaWdodD0nNjQnIHJ4PScxNCcgZmlsbD0ndXJsKCNnKScvPjxwYXRoIGQ9J005IDQ3IEgzOScgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxjaXJjbGUgY3g9JzknIGN5PSc0Nycgcj0nNScgZmlsbD0nI2ZmZicvPjxjaXJjbGUgY3g9JzQ1JyBjeT0nNDcnIHI9JzcnIGZpbGw9JyNmYjhjMDAnIHN0cm9rZT0nI2ZmZicgc3Ryb2tlLXdpZHRoPSczJy8+PHBhdGggZD0nTTEzIDMzIEMxOCAxMiAzOCAxMCA0NCAzMCcgZmlsbD0nbm9uZScgc3Ryb2tlPScjZmZmZmZmJyBzdHJva2Utd2lkdGg9JzMuNScgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtZGFzaGFycmF5PScxIDcnLz48cGF0aCBkPSdNMzYgMjcgTDQ1IDM3IEw1MCAyNCBaJyBmaWxsPScjZmZmJy8+PC9zdmc+Cg==
 // @namespace    https://github.com/DrSlump34
-// @version      0.05.00
+// @version      0.05.01
 // @description  Jump to either end of the selected segment, to its middle, or fit it on screen — from the segment panel, from a small toolbar that appears when you hover the selection, or by keyboard. A Back button returns you where you were.
 // @description:fr Sauter à l'une ou l'autre extrémité du segment sélectionné, à son milieu, ou l'afficher en entier — depuis le panneau du segment, depuis une petite barre qui apparaît au survol de la sélection, ou au clavier. Un bouton Revenir vous ramène d'où vous veniez.
 // @description:de Springen Sie zu einem Ende des ausgewählten Segments, zu seiner Mitte, oder zeigen Sie es ganz an — über den Segmentbereich, über eine kleine Leiste, die beim Überfahren der Auswahl erscheint, oder per Tastatur. Eine Zurück-Schaltfläche bringt Sie zurück.
@@ -675,7 +675,9 @@
         const ln = racine.querySelector('.wjn-len');
         if (ln) {
             const l = longueur(c.metres);
-            ln.textContent = l.court;
+            // Écrire le même texte remplace quand même le nœud : l'observateur du panneau le verrait
+            // et rappellerait titrer(), sans fin.
+            if (ln.textContent !== l.court) ln.textContent = l.court;
             ln.title = t('tipLen', l.exact, c.n);
         }
     }
