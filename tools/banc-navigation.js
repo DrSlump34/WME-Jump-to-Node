@@ -9,10 +9,12 @@ const f = process.argv[2] || path.join(__dirname, '..', 'WME-Jump-to-Node.user.j
 const code = fs.readFileSync(f, 'utf8');
 
 // maj : { installee, reponse: { status, responseText } } pour la pastille de nouvelle version.
-function monter(segments, maj) {
+// stock : contenu initial du localStorage ; touchesWme : ce que getAllShortcuts rend (touches posées à la main).
+function monter(segments, maj, stock = {}, touchesWme = {}) {
     let horloge = 1e12;
     const etat = { lon: 3.8, lat: 43.6, zoom: 17, sel: [] };
-    const handlers = {}, raccourcis = {};
+    const handlers = {}, raccourcis = {}, touchesPosees = {}, ecouteurs = {};
+    const ls = new Map(Object.entries(stock));
     const pastille = { hidden: true, span: { textContent: '' }, querySelector() { return this.span; } };
     const el = () => ({ addEventListener() { }, setAttribute() { }, querySelector: () => null, style: {}, appendChild() { } });
     const emettre = n => (handlers[n] || []).forEach(h => h());
@@ -30,14 +32,17 @@ function monter(segments, maj) {
         DataModel: { Segments: { getById: ({ segmentId }) => segments[segmentId] || null } },
         Settings: { getUserSettings: () => ({ isImperial: false }) },
         Events: { on: ({ eventName, eventHandler }) => { (handlers[eventName] = handlers[eventName] || []).push(eventHandler); } },
-        Shortcuts: { createShortcut: ({ shortcutId, callback }) => { raccourcis[shortcutId] = callback; } },
+        Shortcuts: {
+            createShortcut: ({ shortcutId, shortcutKeys, callback }) => { raccourcis[shortcutId] = callback; touchesPosees[shortcutId] = shortcutKeys; },
+            getAllShortcuts: () => Object.keys(raccourcis).map(id => ({ shortcutId: id, description: '', shortcutKeys: touchesWme[id] || null })),
+        },
         Sidebar: { registerScriptTab: () => new Promise(() => { }) },
     };
     const ctx = {
         console: { log() { }, error: console.error }, Math, JSON, Object, Array, Number, String, Boolean, Map, Set, Promise, Intl,
         Infinity, NaN, isNaN, parseInt, parseFloat, Error,
         setTimeout: () => 0, clearTimeout() { }, Date: { now: () => horloge },
-        localStorage: { getItem: () => null, setItem() { } }, navigator: { language: 'fr' },
+        localStorage: { getItem: k => ls.has(k) ? ls.get(k) : null, setItem: (k, v) => { ls.set(k, String(v)); } }, navigator: { language: 'fr' },
         MutationObserver: class { observe() { } }, GM_info: { script: { version: maj ? maj.installee : 'banc' } },
         GM_xmlhttpRequest: o => { if (maj) o.onload(maj.reponse); },
         document: {
@@ -48,10 +53,11 @@ function monter(segments, maj) {
         getWmeSdk: () => sdk,
     };
     ctx.window = ctx;
-    ctx.addEventListener = () => { };
+    ctx.addEventListener = (n, f) => { (ecouteurs[n] = ecouteurs[n] || []).push(f); };
     ctx.unsafeWindow = ctx;
     vm.runInNewContext(code, ctx);
     return {
+        touchesPosees, ls, fermer: () => (ecouteurs.beforeunload || []).forEach(f => f()),
         etat, pastille,
         touche: id => raccourcis[id](),
         // L'éditeur fait glisser la carte, plus tard que le saut.
@@ -121,6 +127,17 @@ const pos = e => '(' + e.lon + ', ' + e.lat + ')';
     verifier('pastille : page absente (404) → éteinte', e.hidden, 'allumée');
     e = essai('0.13.00', 200, '0.9.00');
     verifier('pastille : 0.9.00 n\'est pas plus récent que 0.13.00', e.hidden, 'allumée');
+}
+{   // Touches des raccourcis : WME ne les garde pas d'un chargement à l'autre, le script si.
+    let b = monter(SEGS, null, { 'wjn.raccourcis': JSON.stringify({ 'wjn-node-a': '6,74' }) });
+    verifier('touche retenue redonnée au chargement, au format du SDK (6,74 → SA+j)', b.touchesPosees['wjn-node-a'] === 'SA+j' && b.touchesPosees['wjn-node-b'] === null, JSON.stringify(b.touchesPosees));
+    b = monter(SEGS, null, {}, { 'wjn-fit': '4,70', 'wjn-middle': '4,38', 'wjn-back': 'A+b' });
+    b.fermer();
+    const autre = monter(SEGS);
+    autre.ls.set('wjn.raccourcis', JSON.stringify({ 'wjn-node-a': '6,74' }));   // posée entre-temps dans un autre onglet
+    autre.fermer();
+    verifier('onglet fermé sans changement : n\'efface pas la touche d\'un autre onglet', autre.ls.get('wjn.raccourcis') === JSON.stringify({ 'wjn-node-a': '6,74' }), String(autre.ls.get('wjn.raccourcis')));
+    verifier('touches posées enregistrées à la fermeture (4,70 → A+f ; flèche écartée)', b.ls.get('wjn.raccourcis') === JSON.stringify({ 'wjn-fit': 'A+f', 'wjn-back': 'A+b' }), String(b.ls.get('wjn.raccourcis')));
 }
 
 if (echecs.length) { console.error('\n' + echecs.length + ' échec(s)'); process.exit(1); }

@@ -29,6 +29,10 @@ const TEMOINS = [
     ['banc-navigation.js', 'chaîne qui ne suit plus le sens du premier segment', 'return sensPremier ? trace : trace.reverse();', 'return trace;'],
     ['banc-navigation.js', 'versions comparées comme des chaînes', 'majCmp(VERSION, m[1]) >= 0) return;', 'VERSION >= m[1]) return;'],
     ['banc-navigation.js', 'pastille allumée sur une page d\'erreur', '        if (r.status < 200 || r.status >= 300) { retenir(null); return; }\n', ''],
+    ['banc-navigation.js', 'touches oubliées au chargement', 'creer(versFormatSdk(touches[d.id]));', 'creer(null);'],
+    ['banc-navigation.js', 'touche numérique rendue telle quelle (affichée vide par WME)', 'if (!m) return k || null;', 'return k || null;'],
+    ['banc-navigation.js', 'touches jamais enregistrées', "        pw.addEventListener('beforeunload', retenirTouches);\n", ''],
+    ['banc-navigation.js', 'onglet sans changement qui écrase les touches', '        if (s === touchesConnues) return;\n', ''],
     ['banc-navigation.js', 'nœuds A et B inversés', "const pt = action === 'A' ? c.A : action === 'B' ? c.B", "const pt = action === 'A' ? c.B : action === 'B' ? c.A"],
 ];
 

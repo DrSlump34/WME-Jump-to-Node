@@ -11,7 +11,7 @@ KuniaKid, 07/05/2026). Le seul script qui le faisait
 ([439269](https://greasyfork.org/scripts/439269), 2022) s'appuie sur des API internes retirées
 depuis.
 
-![Le panneau du segment et la barre au survol](capture_0.04.00_survol.png)
+![Le panneau du segment et la barre au survol](capture_0.06.00_survol.png)
 
 ## Trois façons de s'en servir
 
@@ -47,8 +47,11 @@ La barre de survol se désactive dans l'onglet Scripts.
 Aucune modification de la carte : aucune action n'entre dans la pile d'annulation (contrôlé par
 `W.model.actionManager.getActions().length`, resté à 0 sur tous les essais).
 
+Sa seule requête hors de waze.com : au plus une fois par jour, il lit sur GreasyFork le numéro de la
+version publiée, pour allumer une pastille rouge dans l'onglet Scripts quand une mise à jour est sortie.
+
 ## Installation
 
 Depuis [GreasyFork](https://greasyfork.org/scripts/597298-wme-jump-to-node) (Tampermonkey ou Violentmonkey) : les mises à jour arrivent ensuite toutes seules. Discussion, retours et idées : [fil Discuss](https://www.waze.com/discuss/t/script-wme-jump-to-node/412995). Licence MIT.
 
-<img src="capture_0.04.00_onglet.png" width="260" alt="L'onglet Scripts : réglage et aide">
+<img src="capture_0.06.00_onglet.png" width="260" alt="L'onglet Scripts : réglage et aide">

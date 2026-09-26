@@ -1048,6 +1048,50 @@
 
     // Déclarés sans touches, pour ne rien prendre à un autre script : chacun les attribue
     // dans Paramètres › Raccourcis clavier.
+    //
+    // WME ne garde PAS les touches qu'on attribue aux raccourcis d'un script : au rechargement,
+    // le script les redéclare et elles repartent à « None » (mesuré le 26/09 : Alt+Maj+J posé,
+    // actif, perdu au rechargement). Le script les relit donc par getAllShortcuts() quand la
+    // page se ferme ou passe en arrière-plan, et les redonne à createShortcut au chargement.
+    // Le format rendu (« 6,74 » : modificateurs, code de touche) est accepté tel quel en retour.
+    // Mais la touche posée à la main revient au format « 6,74 » (bits C=1 S=2 A=4, code de touche),
+    // que createShortcut accepte sans l'afficher (un caractère nul dans la liste de WME) ; il faut
+    // lui rendre « SA+j » (mesuré le 26/09 : « AS+k » et « SA+k » s'affichent Alt + Maj + K, mais
+    // « A+S+k » perd Maj). On traduit les lettres et les chiffres ; une touche spéciale (flèche,
+    // pavé numérique) n'est pas reprise, faute d'un nom que createShortcut comprenne.
+    function versFormatSdk(k) {
+        const m = /^(\d+),(\d+)$/.exec(String(k || ''));
+        if (!m) return k || null;
+        const bits = +m[1], code = +m[2];
+        const touche = (code >= 48 && code <= 57) || (code >= 65 && code <= 90) ? String.fromCharCode(code).toLowerCase() : null;
+        if (!touche) return null;
+        const mods = (bits & 1 ? 'C' : '') + (bits & 2 ? 'S' : '') + (bits & 4 ? 'A' : '');
+        return (mods ? mods + '+' : '') + touche;
+    }
+    const TOUCHES_KEY = 'wjn.raccourcis';
+    let touchesConnues = '{}';    // ce que cet onglet a lu ou écrit en dernier
+    function lireTouches() {
+        try { const o = JSON.parse(localStorage.getItem(TOUCHES_KEY) || '{}'); return o && typeof o === 'object' ? o : {}; }
+        catch (e) { return {}; }
+    }
+    // N'écrit que si les touches ont changé DANS CET ONGLET : sinon, un second onglet WME fermé
+    // après coup effacerait la touche qu'on vient de poser dans le premier (mesuré le 26/09 : une
+    // instance sans touche a remis le stockage à « {} » en se fermant).
+    function retenirTouches() {
+        let liste;
+        try { liste = sdk.Shortcuts.getAllShortcuts(); } catch (e) { logUneFois('touches', 'raccourcis illisibles : ' + e.message); return; }
+        const o = {};
+        for (const r of liste || []) {
+            if (!r || !/^wjn-/.test(r.shortcutId) || !r.shortcutKeys) continue;
+            const k = versFormatSdk(r.shortcutKeys);
+            if (k) o[r.shortcutId] = k;
+            else logUneFois('touche-' + r.shortcutId, 'raccourci ' + r.shortcutId + ' : touche spéciale ' + r.shortcutKeys + ' non retenue');
+        }
+        const s = JSON.stringify(o);
+        if (s === touchesConnues) return;
+        try { localStorage.setItem(TOUCHES_KEY, s); touchesConnues = s; } catch (e) { }
+    }
+
     function poserRaccourcis() {
         const defs = [
             { id: 'wjn-node-a', desc: 'scA', act: 'A' },
@@ -1056,11 +1100,20 @@
             { id: 'wjn-middle', desc: 'scMid', act: 'mid' },
             { id: 'wjn-back', desc: 'scBack', act: 'back' },
         ];
+        const touches = lireTouches();
+        touchesConnues = JSON.stringify(touches);
         for (const d of defs) {
+            const creer = cles => sdk.Shortcuts.createShortcut({ shortcutId: d.id, shortcutKeys: cles, description: t(d.desc), callback: () => agir(d.act) });
             try {
-                sdk.Shortcuts.createShortcut({ shortcutId: d.id, shortcutKeys: null, description: t(d.desc), callback: () => agir(d.act) });
-            } catch (e) { log('raccourci ' + d.id + ' : ' + e.message); }
+                creer(versFormatSdk(touches[d.id]));
+            } catch (e) {
+                // Touche prise entre-temps par un autre script : on la lui laisse, sans touche ici.
+                log('raccourci ' + d.id + ' : ' + e.message + (touches[d.id] ? ' — reposé sans touche' : ''));
+                if (touches[d.id]) { try { creer(null); } catch (e2) { log('raccourci ' + d.id + ' : ' + e2.message); } }
+            }
         }
+        pw.addEventListener('beforeunload', retenirTouches);
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') retenirTouches(); });
     }
 
     // =====================================================================
