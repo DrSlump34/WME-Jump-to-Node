@@ -22,7 +22,8 @@ depuis.
 | **Clavier** | cinq raccourcis déclarés **sans touches** dans Paramètres › Raccourcis clavier |
 
 **Plusieurs segments sélectionnés** : s'ils se suivent (chemin simple), A et B mènent aux deux
-bouts de la chaîne et « Milieu » le milieu de la chaîne. Sinon, seuls « Tout voir » et
+bouts de la chaîne — A du côté du nœud A du **premier** segment sélectionné — et « Milieu » le
+milieu de la chaîne. Sinon, seuls « Tout voir » et
 « Milieu » (centre de l'emprise) sont proposés.
 
 **Longueur** : une pastille en bout de ligne (panneau et barre de survol) donne la longueur de la
@@ -31,9 +32,15 @@ format de la langue et dans l'unité choisie dans les réglages de WME (m/km ou 
 exacte est dans l'infobulle.
 
 **Revenir** ramène à la vue d'avant le **premier** déplacement : A puis B puis Revenir ramène au
-point de départ.
+point de départ. Si vous déplacez vous-même la carte entre deux sauts, c'est ce nouvel endroit
+qui devient le point de départ.
 
-La barre de survol se désactive dans l'onglet Scripts (🎯).
+La barre de survol se désactive dans l'onglet Scripts.
+
+## Contrôles avant livraison
+
+`node tools/temoins.js` lance les trois contrôles (`check-idents`, `check-i18n`,
+`banc-navigation`) sur le fichier, puis exige que chacun échoue sur ses témoins.
 
 ## Ce qu'il ne fait jamais
 
