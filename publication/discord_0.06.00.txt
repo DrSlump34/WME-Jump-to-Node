@@ -1,0 +1,7 @@
+🆕 **WME Jump to Node v0.06.00** — https://greasyfork.org/fr/scripts/597298-wme-jump-to-node
+• **Revenir** : si vous déplacez vous-même la carte entre deux sauts, Revenir vous ramène là où vous étiez allé, et non plus au tout premier point de la session.
+• **Raccourcis clavier** : les touches que vous leur attribuez sont enfin conservées au rechargement de WME (WME les oubliait).
+• **Plusieurs segments** : A est toujours du côté du nœud A du premier segment sélectionné, quel que soit l’ordre des autres.
+• La barre de survol ne disparaît plus sous le pointeur.
+• Onglet Scripts : une pastille rouge signale une nouvelle version ; le script se charge aussi sur la bêta.
+Détail : https://www.waze.com/discuss/t/script-wme-jump-to-node/412995
