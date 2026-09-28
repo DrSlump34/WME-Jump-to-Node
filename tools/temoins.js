@@ -24,8 +24,8 @@ const TEMOINS = [
     ['check-i18n.js', 'clé appelée qui n\'existe pas', "mid: c.A ? 'tipMid' : 'tipMidBox'", "mid: c.A ? 'tipMid' : 'tipMidZone'"],
     ['check-i18n.js', 'espace ordinaire devant deux-points en français', "tipFit: 'Tout voir\\u00a0: ", "tipFit: 'Tout voir : "],
     // banc-navigation
-    ['banc-navigation.js', 'Revenir qui oublie les déplacements à la main (la 0.05.01)', '        if (retour && !memeVue(v, pose)) retour = null;\n', ''],
-    ['banc-navigation.js', 'saut qui ne note pas où il a laissé la carte', '        noterPose();\n        majBarre();', '        majBarre();'],
+    ['banc-navigation.js', 'Revenir qui oublie les déplacements à la main (la 0.05.01)', '        if (retour && !(await memeVue(v, pose))) retour = null;\n', ''],
+    ['banc-navigation.js', 'saut qui ne note pas où il a laissé la carte', '        await noterPose();\n        majBarre();', '        majBarre();'],
     ['banc-navigation.js', 'chaîne qui ne suit plus le sens du premier segment', 'return sensPremier ? trace : trace.reverse();', 'return trace;'],
     ['banc-navigation.js', 'versions comparées comme des chaînes', 'majCmp(VERSION, m[1]) >= 0) return;', 'VERSION >= m[1]) return;'],
     ['banc-navigation.js', 'pastille allumée sur une page d\'erreur', '        if (r.status < 200 || r.status >= 300) { retenir(null); return; }\n', ''],
@@ -33,6 +33,8 @@ const TEMOINS = [
     ['banc-navigation.js', 'touche numérique rendue telle quelle (affichée vide par WME)', 'if (!m) return k || null;', 'return k || null;'],
     ['banc-navigation.js', 'touches jamais enregistrées', "        pw.addEventListener('beforeunload', retenirTouches);\n", ''],
     ['banc-navigation.js', 'onglet sans changement qui écrase les touches', '        if (s === touchesConnues) return;\n', ''],
+    ['banc-navigation.js', 'saut qui n\'attend pas le SDK async (vue lue avant le déplacement)', '        await memoriser();\n', '        memoriser();\n'],
+    ['banc-navigation.js', 'Revenir qui n\'attend pas le SDK async', '        await sdk.Map.setMapCenter({ lonLat: { lon: r.lon, lat: r.lat }, zoomLevel: r.zoom });', '        sdk.Map.setMapCenter({ lonLat: { lon: r.lon, lat: r.lat }, zoomLevel: 99 });'],
     ['banc-navigation.js', 'nœuds A et B inversés', "const pt = action === 'A' ? c.A : action === 'B' ? c.B", "const pt = action === 'A' ? c.B : action === 'B' ? c.A"],
 ];
 

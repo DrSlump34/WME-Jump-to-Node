@@ -9,7 +9,7 @@
 // @name:he      WME Jump to Node
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgdmlld0JveD0nMCAwIDY0IDY0Jz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9J2cnIHgxPScwJyB5MT0nMCcgeDI9JzEnIHkyPScxJz48c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMxZTg4ZTUnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyMxNTY1YzAnLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0nNjQnIGhlaWdodD0nNjQnIHJ4PScxNCcgZmlsbD0ndXJsKCNnKScvPjxwYXRoIGQ9J005IDQ3IEgzOScgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxjaXJjbGUgY3g9JzknIGN5PSc0Nycgcj0nNScgZmlsbD0nI2ZmZicvPjxjaXJjbGUgY3g9JzQ1JyBjeT0nNDcnIHI9JzcnIGZpbGw9JyNmYjhjMDAnIHN0cm9rZT0nI2ZmZicgc3Ryb2tlLXdpZHRoPSczJy8+PHBhdGggZD0nTTEzIDMzIEMxOCAxMiAzOCAxMCA0NCAzMCcgZmlsbD0nbm9uZScgc3Ryb2tlPScjZmZmZmZmJyBzdHJva2Utd2lkdGg9JzMuNScgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtZGFzaGFycmF5PScxIDcnLz48cGF0aCBkPSdNMzYgMjcgTDQ1IDM3IEw1MCAyNCBaJyBmaWxsPScjZmZmJy8+PC9zdmc+Cg==
 // @namespace    https://github.com/DrSlump34
-// @version      0.06.00
+// @version      0.06.01
 // @description  Jump to either end of the selected segment, to its middle, or fit it on screen — from the segment panel, from a small toolbar that appears when you hover the selection, or by keyboard. A Back button returns you where you were.
 // @description:fr Sauter à l'une ou l'autre extrémité du segment sélectionné, à son milieu, ou l'afficher en entier — depuis le panneau du segment, depuis une petite barre qui apparaît au survol de la sélection, ou au clavier. Un bouton Revenir vous ramène d'où vous veniez.
 // @description:de Springen Sie zu einem Ende des ausgewählten Segments, zu seiner Mitte, oder zeigen Sie es ganz an — über den Segmentbereich, über eine kleine Leiste, die beim Überfahren der Auswahl erscheint, oder per Tastatur. Eine Zurück-Schaltfläche bringt Sie zurück.
@@ -451,14 +451,15 @@
     //  La sélection
     // =====================================================================
 
-    function segmentsSelectionnes() {
+    // ⚠️ SDK en mode async (seul mode au 01/01/2027, Discuss 412920) : tout appel rend une promesse.
+    async function segmentsSelectionnes() {
         let sel;
-        try { sel = sdk.Editing.getSelection(); } catch (e) { return []; }
+        try { sel = await sdk.Editing.getSelection(); } catch (e) { return []; }
         if (!sel || sel.objectType !== 'segment' || !sel.ids || !sel.ids.length) return [];
         const segs = [];
         for (const id of sel.ids) {
             let s = null;
-            try { s = sdk.DataModel.Segments.getById({ segmentId: id }); } catch (e) { }
+            try { s = await sdk.DataModel.Segments.getById({ segmentId: id }); } catch (e) { }
             if (s && s.geometry && s.geometry.coordinates && s.geometry.coordinates.length >= 2) segs.push(s);
         }
         return segs.length === sel.ids.length ? segs : [];
@@ -502,8 +503,8 @@
     }
 
     // Ce que la sélection permet : tout ce qui suit se déduit de cet objet, et de lui seul.
-    function cibles() {
-        const segs = segmentsSelectionnes();
+    async function cibles() {
+        const segs = await segmentsSelectionnes();
         if (!segs.length) return null;
         const trace = chaine(segs);
         const listes = segs.map(s => s.geometry.coordinates);
@@ -525,17 +526,17 @@
     //  Déplacements, retour, repère
     // =====================================================================
 
-    function vueCourante() {
-        const c = sdk.Map.getMapCenter();
-        return { lon: c.lon, lat: c.lat, zoom: sdk.Map.getZoomLevel() };
+    async function vueCourante() {
+        const c = await sdk.Map.getMapCenter();
+        return { lon: c.lon, lat: c.lat, zoom: await sdk.Map.getZoomLevel() };
     }
 
     // Deux vues sont les mêmes si le zoom est égal et si les centres tombent à 2 px près à
     // l'écran : une comparaison en degrés dépendrait du zoom.
-    function memeVue(a, b) {
+    async function memeVue(a, b) {
         if (!a || !b || a.zoom !== b.zoom) return false;
-        const pa = sdk.Map.getPixelFromLonLat({ lonLat: { lon: a.lon, lat: a.lat } });
-        const pb = sdk.Map.getPixelFromLonLat({ lonLat: { lon: b.lon, lat: b.lat } });
+        const pa = await sdk.Map.getPixelFromLonLat({ lonLat: { lon: a.lon, lat: a.lat } });
+        const pb = await sdk.Map.getPixelFromLonLat({ lonLat: { lon: b.lon, lat: b.lat } });
         return Math.hypot(pa.x - pb.x, pa.y - pb.y) <= 2;
     }
 
@@ -543,56 +544,59 @@
     // pas au nœud A. Mais si la carte n'est plus là où le dernier saut l'a laissée, l'éditeur
     // l'a déplacée lui-même : le point de départ devient l'endroit où il est allé. Sans cela,
     // Revenir ramenait (jusqu'à la 0.05.01) à une vue du début de la session, à des kilomètres.
-    function memoriser() {
-        const v = vueCourante();
-        if (retour && !memeVue(v, pose)) retour = null;
+    async function memoriser() {
+        const v = await vueCourante();
+        if (retour && !(await memeVue(v, pose))) retour = null;
         if (!retour) retour = v;
     }
 
     // Relevée après le saut, puis à chaque déplacement qu'il provoque pendant une seconde : un
     // cadrage peut arriver en plusieurs temps. Un déplacement plus tardif est celui de l'éditeur.
-    function noterPose() {
+    async function noterPose() {
         poseJusqua = Date.now() + 1000;
-        pose = vueCourante();
+        pose = await vueCourante();
     }
     function surDeplacementCarte() {
-        if (Date.now() < poseJusqua) { try { pose = vueCourante(); } catch (e) { } }
+        if (Date.now() < poseJusqua) vueCourante().then(v => { pose = v; }, () => { });
         cacherPop();
     }
 
     // Toutes les commandes (panneau, barre de survol, clavier) passent par ici.
-    function agir(action) {
-        if (action === 'back') { revenir(); return; }
-        const c = cibles();
+    async function agir(action) {
+        if (action === 'back') { await revenir(); return; }
+        const c = await cibles();
         if (!c) return;
         const pt = action === 'A' ? c.A : action === 'B' ? c.B : action === 'mid' ? c.mid : null;
         if (action !== 'fit' && !pt) return;
-        memoriser();
+        await memoriser();
         if (action === 'fit') {
             const [w, s, e, n] = c.bbox;
             const mx = Math.max((e - w) * FIT_MARGIN, 0.0002), my = Math.max((n - s) * FIT_MARGIN, 0.0002);
-            sdk.Map.zoomToExtent({ bbox: [w - mx, s - my, e + mx, n + my] });
+            await sdk.Map.zoomToExtent({ bbox: [w - mx, s - my, e + mx, n + my] });
         } else {
-            sdk.Map.setMapCenter({ lonLat: { lon: pt[0], lat: pt[1] } });
+            await sdk.Map.setMapCenter({ lonLat: { lon: pt[0], lat: pt[1] } });
             flasher(pt);
         }
-        noterPose();
+        await noterPose();
         majBarre();
     }
+    // Les commandes (clic, clavier) rendent la promesse de l'action ; une erreur se journalise.
+    const lancerAction = action => agir(action).catch(e => log('action ' + action + ' : ' + e.message));
 
-    function revenir() {
+    async function revenir() {
         if (!retour) return;
-        sdk.Map.setMapCenter({ lonLat: { lon: retour.lon, lat: retour.lat }, zoomLevel: retour.zoom });
+        const r = retour;
         retour = null;
         pose = null;
+        await sdk.Map.setMapCenter({ lonLat: { lon: r.lon, lat: r.lat }, zoomLevel: r.zoom });
         majBarre();
     }
 
     // Un anneau bref sur le point visé : le centre de la carte ne se voit pas, un point qui
     // s'allume si.
-    function poserCalqueFlash() {
+    async function poserCalqueFlash() {
         try {
-            sdk.Map.addLayer({
+            await sdk.Map.addLayer({
                 layerName: FLASH_LAYER,
                 styleRules: [{ style: { pointRadius: 14, fillOpacity: 0, strokeColor: '#ff00ff', strokeWidth: 4, strokeOpacity: 1 } }]
             });
@@ -600,17 +604,17 @@
         } catch (e) { log('calque de repère : ' + e.message); }
     }
 
-    function flasher(pt) {
+    async function flasher(pt) {
         if (!flashOk) return;
         try {
             clearTimeout(flashTimer);
-            sdk.Map.removeAllFeaturesFromLayer({ layerName: FLASH_LAYER });
-            sdk.Map.addFeatureToLayer({
+            await sdk.Map.removeAllFeaturesFromLayer({ layerName: FLASH_LAYER });
+            await sdk.Map.addFeatureToLayer({
                 layerName: FLASH_LAYER,
                 feature: { type: 'Feature', id: 'wjn-point', geometry: { type: 'Point', coordinates: pt }, properties: {} }
             });
             flashTimer = setTimeout(() => {
-                try { sdk.Map.removeAllFeaturesFromLayer({ layerName: FLASH_LAYER }); } catch (e) { }
+                Promise.resolve().then(() => sdk.Map.removeAllFeaturesFromLayer({ layerName: FLASH_LAYER })).catch(() => { });
             }, FLASH_MS);
         } catch (e) { log('repère : ' + e.message); }
     }
@@ -736,9 +740,12 @@
     // Longueur au format de la langue (« 3,84 km » et non « 3.842 km », qu'un francophone lit
     // trois mille huit cents) et dans l'unité choisie dans les réglages de WME ; la valeur
     // exacte va dans l'infobulle.
+    // L'unité se relit (SDK async) avant chaque affichage, puis `longueur` s'en sert sans attendre.
+    let imperial = false;
+    async function lireUnite() {
+        try { imperial = !!(await sdk.Settings.getUserSettings()).isImperial; } catch (e) { logUneFois('unite', 'unité des réglages illisible, mètres par défaut : ' + e.message); }
+    }
     function longueur(metres) {
-        let imperial = false;
-        try { imperial = !!sdk.Settings.getUserSettings().isImperial; } catch (e) { logUneFois('unite', 'unité des réglages illisible, mètres par défaut : ' + e.message); }
         // La valeur exacte s'écrit sans séparateur de milliers : « 3,842 m » (anglais, langue de
         // repli) se lirait 3,8 m pour un néerlandais ou un hispanophone ; « 3842 m » ne trompe personne.
         const nb = (v, d, groupes = true) => new Intl.NumberFormat(_lang, { minimumFractionDigits: d, maximumFractionDigits: d, useGrouping: groupes }).format(v);
@@ -781,7 +788,7 @@
         racine.addEventListener('click', ev => {
             const b = ev.target.closest('[data-wjn]');
             if (!b || b.disabled) return;
-            agir(b.getAttribute('data-wjn'));
+            lancerAction(b.getAttribute('data-wjn'));
             if (apres) apres();
         });
     }
@@ -793,18 +800,27 @@
     let signatureBarre = '';
 
     function majBarre() {
+        majBarreAsync().catch(e => log('barre : ' + e.message));
+    }
+    async function majBarreAsync() {
+        const c = await cibles();
+        await lireUnite();
         const bar = document.getElementById(BAR_ID);
-        const c = cibles();
         if (!bar || !c) return;
         titrer(bar, c);
     }
 
     // WME reconstruit le panneau à chaque sélection : la barre est reposée à chaque fois, et
     // retirée quand la sélection n'est plus faite de segments.
-    function placerBarre() {
+    // Avec le SDK async, deux placements peuvent se croiser : seul le dernier touche au DOM.
+    let generationPlacement = 0;
+    async function placerBarre() {
+        const generation = ++generationPlacement;
+        const c = await cibles();
+        await lireUnite();
+        if (generation !== generationPlacement) return;
         const entete = document.querySelector('.segment-feature-editor wz-section-header');
         const existante = document.getElementById(BAR_ID);
-        const c = cibles();
         if (c && !entete && document.querySelector('.segment-feature-editor')) logUneFois('entete', 'en-tête du panneau du segment introuvable : la barre n\'est pas posée');
         if (!c || !entete) { if (existante) existante.remove(); signatureBarre = ''; return; }
         const sig = _lang + (c.unique ? 'u' : 'm') + (c.A ? 'c' : '-');
@@ -828,7 +844,7 @@
     function planifierPlacement() {
         if (placementPrevu) return;
         placementPrevu = true;
-        setTimeout(() => { placementPrevu = false; placerBarre(); }, 30);
+        setTimeout(() => { placementPrevu = false; placerBarre().catch(e => log('barre : ' + e.message)); }, 30);
     }
 
     // =====================================================================
@@ -842,13 +858,13 @@
     let boutonEnfonce = false;
     let surPop = false;           // le pointeur est sur la barre : elle ne doit pas s'effacer
 
-    function surLaSelection(x, y) {
-        const c = cibles();
+    async function surLaSelection(x, y) {
+        const c = await cibles();
         if (!c) return false;
         for (const coords of c.listes) {
             let prec = null;
             for (const [lon, lat] of coords) {
-                const p = sdk.Map.getPixelFromLonLat({ lonLat: { lon, lat } });
+                const p = await sdk.Map.getPixelFromLonLat({ lonLat: { lon, lat } });
                 if (prec && distPointSegment(x, y, prec.x, prec.y, p.x, p.y) <= HOVER_PX) return true;
                 prec = p;
             }
@@ -863,8 +879,9 @@
         if (pop) pop.hidden = true;
     }
 
-    function montrerPop(x, y) {
-        const c = cibles();
+    async function montrerPop(x, y) {
+        const c = await cibles();
+        await lireUnite();
         if (!c) return;
         if (!pop) {
             pop = document.createElement('div');
@@ -890,12 +907,17 @@
         pop.style.top = Math.max(4, py) + 'px';
     }
 
-    function surMouvement(ev) {
+    // Un mouvement traité après un plus récent (SDK async) est abandonné : c'est le dernier qui compte.
+    let generationMouvement = 0;
+    async function surMouvement(ev) {
         if (!opts.survol || boutonEnfonce) return;
+        const generation = ++generationMouvement;
         let dessin = false;
-        try { dessin = sdk.Editing.isDrawingInProgress(); } catch (e) { logUneFois('dessin', 'état du tracé illisible : ' + e.message); }
+        try { dessin = await sdk.Editing.isDrawingInProgress(); } catch (e) { logUneFois('dessin', 'état du tracé illisible : ' + e.message); }
+        if (generation !== generationMouvement) return;
         if (dessin) { cacherPop(); return; }
-        const dessus = surLaSelection(ev.clientX, ev.clientY);
+        const dessus = await surLaSelection(ev.clientX, ev.clientY);
+        if (generation !== generationMouvement || !opts.survol || boutonEnfonce) return;
         const visible = pop && !pop.hidden;
         // Un mouvement traité en retard, pris juste avant d'entrer dans la barre, réarmait le
         // masquage APRÈS son mouseenter : elle s'effaçait sous le pointeur (0.05.01).
@@ -909,19 +931,19 @@
         if (arret && Math.hypot(ev.clientX - arret.x, ev.clientY - arret.y) <= HOVER_STILL_PX) return;
         arret = { x: ev.clientX, y: ev.clientY };
         clearTimeout(survolTimer);
-        survolTimer = setTimeout(() => montrerPop(arret.x, arret.y), HOVER_DELAY);
+        survolTimer = setTimeout(() => { montrerPop(arret.x, arret.y).catch(e => log('survol : ' + e.message)); }, HOVER_DELAY);
     }
 
-    function brancherSurvol() {
+    async function brancherSurvol() {
         let vue;
-        try { vue = sdk.Map.getMapViewportElement(); } catch (e) { log('survol : ' + e.message); return; }
+        try { vue = await sdk.Map.getMapViewportElement(); } catch (e) { log('survol : ' + e.message); return; }
         let prevu = null, dernier = null;
         vue.addEventListener('mousemove', ev => {
             // Un setTimeout et non requestAnimationFrame, suspendu dans un onglet en arrière-plan.
             // On traite le DERNIER mouvement de la fenêtre de 16 ms, là où est le pointeur.
             dernier = ev;
             if (prevu) return;
-            prevu = setTimeout(() => { prevu = null; surMouvement(dernier); }, 16);
+            prevu = setTimeout(() => { prevu = null; surMouvement(dernier).catch(e => log('survol : ' + e.message)); }, 16);
         });
         vue.addEventListener('mousedown', () => { boutonEnfonce = true; cacherPop(); });
         window.addEventListener('mouseup', () => { boutonEnfonce = false; });
@@ -1077,9 +1099,18 @@
     // N'écrit que si les touches ont changé DANS CET ONGLET : sinon, un second onglet WME fermé
     // après coup effacerait la touche qu'on vient de poser dans le premier (mesuré le 26/09 : une
     // instance sans touche a remis le stockage à « {} » en se fermant).
+    // `beforeunload` ne peut pas attendre une promesse (SDK async) : les raccourcis se relisent au
+    // fil de l'eau, et la fermeture écrit la DERNIÈRE liste lue, puis tente encore une relecture.
+    let raccourcisLus = null;
+    async function relireTouches() {
+        try { raccourcisLus = await sdk.Shortcuts.getAllShortcuts(); } catch (e) { logUneFois('touches', 'raccourcis illisibles : ' + e.message); }
+    }
     function retenirTouches() {
-        let liste;
-        try { liste = sdk.Shortcuts.getAllShortcuts(); } catch (e) { logUneFois('touches', 'raccourcis illisibles : ' + e.message); return; }
+        ecrireTouches(raccourcisLus);
+        relireTouches().then(() => ecrireTouches(raccourcisLus), () => { });
+    }
+    function ecrireTouches(liste) {
+        if (!liste) return;
         const o = {};
         for (const r of liste || []) {
             if (!r || !/^wjn-/.test(r.shortcutId) || !r.shortcutKeys) continue;
@@ -1092,7 +1123,7 @@
         try { localStorage.setItem(TOUCHES_KEY, s); touchesConnues = s; } catch (e) { }
     }
 
-    function poserRaccourcis() {
+    async function poserRaccourcis() {
         const defs = [
             { id: 'wjn-node-a', desc: 'scA', act: 'A' },
             { id: 'wjn-node-b', desc: 'scB', act: 'B' },
@@ -1103,15 +1134,17 @@
         const touches = lireTouches();
         touchesConnues = JSON.stringify(touches);
         for (const d of defs) {
-            const creer = cles => sdk.Shortcuts.createShortcut({ shortcutId: d.id, shortcutKeys: cles, description: t(d.desc), callback: () => agir(d.act) });
+            const creer = cles => sdk.Shortcuts.createShortcut({ shortcutId: d.id, shortcutKeys: cles, description: t(d.desc), callback: () => lancerAction(d.act) });
             try {
-                creer(versFormatSdk(touches[d.id]));
+                await creer(versFormatSdk(touches[d.id]));
             } catch (e) {
                 // Touche prise entre-temps par un autre script : on la lui laisse, sans touche ici.
                 log('raccourci ' + d.id + ' : ' + e.message + (touches[d.id] ? ' — reposé sans touche' : ''));
-                if (touches[d.id]) { try { creer(null); } catch (e2) { log('raccourci ' + d.id + ' : ' + e2.message); } }
+                if (touches[d.id]) { try { await creer(null); } catch (e2) { log('raccourci ' + d.id + ' : ' + e2.message); } }
             }
         }
+        await relireTouches();
+        setInterval(() => { relireTouches(); }, 10000);
         pw.addEventListener('beforeunload', retenirTouches);
         document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') retenirTouches(); });
     }
@@ -1120,11 +1153,11 @@
     //  INIT
     // =====================================================================
 
-    const init = () => {
+    const init = async () => {
         if (pw.__WJN_LOADED) return;
         pw.__WJN_LOADED = true;
 
-        sdk = pw.getWmeSdk({ scriptId: SCRIPT_ID, scriptName: SCRIPT_NAME });
+        sdk = pw.getWmeSdk({ scriptId: SCRIPT_ID, scriptName: SCRIPT_NAME, mode: 'async' });
         _lang = detectLang();
         opts = lireOpts();
 
@@ -1132,10 +1165,10 @@
         st.textContent = CSS;
         document.head.appendChild(st);
 
-        poserCalqueFlash();
-        poserRaccourcis();
+        await poserCalqueFlash();
+        await poserRaccourcis();
         poserOnglet();
-        brancherSurvol();
+        await brancherSurvol();
         verifierMaj();
 
         try { sdk.Events.on({ eventName: 'wme-selection-changed', eventHandler: () => { cacherPop(); planifierPlacement(); } }); }
@@ -1149,7 +1182,8 @@
         log('v' + VERSION + ' prêt — langue ' + _lang);
     };
 
-    if (pw.W?.userscripts?.state?.isReady) init();
-    else document.addEventListener('wme-ready', init, { once: true });
+    const lancer = () => { init().catch(e => log('démarrage : ' + e.message)); };
+    if (pw.W?.userscripts?.state?.isReady) lancer();
+    else document.addEventListener('wme-ready', lancer, { once: true });
 
 })();
