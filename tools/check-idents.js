@@ -9,6 +9,10 @@
 // pas un appel). Chaque déclaration a maintenant une PORTÉE (le bloc, ou le corps de la
 // fonction pour un paramètre), et toute référence est contrôlée, appel ou non.
 // tools/temoins.js prouve que ces deux cas, et d'autres, font échouer le contrôle.
+// Corrigé le 28/09/2026, repris de WME BAN Coverage (26/09) : l'étalement ...nom était pris pour
+// une propriété (une fonction disparue derrière [...nom(x)] passait), et les numéros de ligne
+// dérivaient (sauts de ligne perdus dans les commentaires /* */ et les gabarits).
+// tools/temoins-idents.js prouve ces deux cas, à la bonne ligne.
 //
 // Usage : node tools/check-idents.js [fichier]
 const fs = require('fs');
@@ -34,7 +38,9 @@ function codeSeul(s) {
         const c = s[i], d = s[i + 1];
         if (etat === 'code') {
             if (c === '/' && d === '/') { while (i < s.length && s[i] !== '\n') i++; continue; }
-            if (c === '/' && d === '*') { i = s.indexOf('*/', i + 2); i = i < 0 ? s.length : i + 2; out += ' '; continue; }
+            // Les sauts de ligne sont GARDÉS (commentaires multilignes, texte des gabarits) : sans eux,
+            // les numéros de ligne signalés dérivaient (audit WBC du 26/09).
+            if (c === '/' && d === '*') { const j = s.indexOf('*/', i + 2), f = j < 0 ? s.length : j + 2; out += ' ' + s.slice(i, f).replace(/[^\n]/g, ''); i = f; continue; }
             if (c === '/' && avantRegex()) {
                 let classe = false;
                 i++;
@@ -62,6 +68,7 @@ function codeSeul(s) {
         if (c === '\\') { i += 2; continue; }
         if (c === '`') { etat = 'code'; i++; out += ' '; continue; }
         if (c === '$' && d === '{') { pile.push(0); etat = 'code'; i += 2; out += ' '; continue; }
+        if (c === '\n') out += '\n';
         i++;
     }
     return out;
@@ -208,7 +215,9 @@ while ((m = reUsage.exec(src))) {
     const nom = m[0], pos = m.index;
     if (MOTS.has(nom) || GLOBAUX.has(nom) || sitesDecl.has(pos)) continue;
     const avant = src.slice(0, pos).match(/(\S)\s*$/);
-    if (avant && avant[1] === '.') continue;                          // propriété : x.nom, x?.nom
+    // Propriété : x.nom, x?.nom — mais PAS l'étalement ...nom, qui est une valeur : le prendre pour une
+    // propriété laissait passer [...fonctionDisparue(x)] (vu le 26/09 en mutant WBC).
+    if (avant && avant[1] === '.' && src.slice(pos - 3, pos) !== '...') continue;
     const apres = src.slice(pos + nom.length).match(/^\s*(\S)/);
     if (apres && apres[1] === ':' && avant && '{,'.includes(avant[1])) continue;   // clé d'objet
     const ok = decls.some(d => d.nom === nom && d.debut <= pos && pos <= d.fin);
