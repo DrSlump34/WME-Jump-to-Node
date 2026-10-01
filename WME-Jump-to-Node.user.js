@@ -7,9 +7,9 @@
 // @name:pt-BR   WME Jump to Node
 // @name:pt      WME Jump to Node
 // @name:he      WME Jump to Node
-// @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgdmlld0JveD0nMCAwIDY0IDY0Jz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9J2cnIHgxPScwJyB5MT0nMCcgeDI9JzEnIHkyPScxJz48c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMxZTg4ZTUnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyMxNTY1YzAnLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0nNjQnIGhlaWdodD0nNjQnIHJ4PScxNCcgZmlsbD0ndXJsKCNnKScvPjxwYXRoIGQ9J005IDQ3IEgzOScgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxjaXJjbGUgY3g9JzknIGN5PSc0Nycgcj0nNScgZmlsbD0nI2ZmZicvPjxjaXJjbGUgY3g9JzQ1JyBjeT0nNDcnIHI9JzcnIGZpbGw9JyNmYjhjMDAnIHN0cm9rZT0nI2ZmZicgc3Ryb2tlLXdpZHRoPSczJy8+PHBhdGggZD0nTTEzIDMzIEMxOCAxMiAzOCAxMCA0NCAzMCcgZmlsbD0nbm9uZScgc3Ryb2tlPScjZmZmZmZmJyBzdHJva2Utd2lkdGg9JzMuNScgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtZGFzaGFycmF5PScxIDcnLz48cGF0aCBkPSdNMzYgMjcgTDQ1IDM3IEw1MCAyNCBaJyBmaWxsPScjZmZmJy8+PC9zdmc+Cg==
+// @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyNCcgaGVpZ2h0PScyNCcgdmlld0JveD0nMCAwIDI0IDI0Jz48cGF0aCBkPSdNMyAxOC41IEgxNCcgc3Ryb2tlPScjNjA3ZDhiJyBzdHJva2Utd2lkdGg9JzIuNicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+PGNpcmNsZSBjeD0nMy41JyBjeT0nMTguNScgcj0nMi40JyBmaWxsPScjNjA3ZDhiJy8+PGNpcmNsZSBjeD0nMTcuNScgY3k9JzE4LjUnIHI9JzMuNicgZmlsbD0nI2ZiOGMwMCcgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzEuMicvPjxwYXRoIGQ9J000LjUgMTMgQzYuNSA0LjUgMTQuNSAzLjUgMTcgMTEnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzYwN2Q4Yicgc3Ryb2tlLXdpZHRoPScyJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1kYXNoYXJyYXk9JzAuMSAzLjQnLz48cGF0aCBkPSdNMTQgMTAgTDE3LjYgMTQuNCBMMjAgOS4yIFonIGZpbGw9JyM2MDdkOGInIHN0cm9rZT0nIzYwN2Q4Yicgc3Ryb2tlLXdpZHRoPScwLjgnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnLz48L3N2Zz4=
 // @namespace    https://github.com/DrSlump34
-// @version      0.06.01
+// @version      0.06.02
 // @description  Jump to either end of the selected segment, to its middle, or fit it on screen — from the segment panel, from a small toolbar that appears when you hover the selection, or by keyboard. A Back button returns you where you were.
 // @description:fr Sauter à l'une ou l'autre extrémité du segment sélectionné, à son milieu, ou l'afficher en entier — depuis le panneau du segment, depuis une petite barre qui apparaît au survol de la sélection, ou au clavier. Un bouton Revenir vous ramène d'où vous veniez.
 // @description:de Springen Sie zu einem Ende des ausgewählten Segments, zu seiner Mitte, oder zeigen Sie es ganz an — über den Segmentbereich, über eine kleine Leiste, die beim Überfahren der Auswahl erscheint, oder per Tastatur. Eine Zurück-Schaltfläche bringt Sie zurück.
@@ -81,13 +81,9 @@
     // verrou anti-double-chargement se lisent sur la page par unsafeWindow, comme dans WDA et WRP.
     const pw = (typeof unsafeWindow !== 'undefined') ? unsafeWindow : window;
 
-    // L'icône de l'en-tête (@icon), pour l'onglet et le titre du panneau.
-    const icone = h => '<svg xmlns="http://www.w3.org/2000/svg" width="' + h + '" height="' + h + '" viewBox="0 0 64 64" aria-hidden="true" focusable="false">' +
-        '<defs><linearGradient id="wjn-ico-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e88e5"/><stop offset="1" stop-color="#1565c0"/></linearGradient></defs>' +
-        '<rect width="64" height="64" rx="14" fill="url(#wjn-ico-g)"/><path d="M9 47 H39" stroke="#fff" stroke-width="6" stroke-linecap="round"/>' +
-        '<circle cx="9" cy="47" r="5" fill="#fff"/><circle cx="45" cy="47" r="7" fill="#fb8c00" stroke="#fff" stroke-width="3"/>' +
-        '<path d="M13 33 C18 12 38 10 44 30" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="1 7"/>' +
-        '<path d="M36 27 L45 37 L50 24 Z" fill="#fff"/></svg>';
+    // L'icône de l'en-tête (@icon), détourée, pour l'onglet et le titre du panneau.
+    const icone = h => '<svg xmlns="http://www.w3.org/2000/svg" width="' + h + '" height="' + h + '" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+        '<path d="M3 18.5 H14" stroke="#607d8b" stroke-width="2.6" stroke-linecap="round"/><circle cx="3.5" cy="18.5" r="2.4" fill="#607d8b"/><circle cx="17.5" cy="18.5" r="3.6" fill="#fb8c00" stroke="#fff" stroke-width="1.2"/><path d="M4.5 13 C6.5 4.5 14.5 3.5 17 11" fill="none" stroke="#607d8b" stroke-width="2" stroke-linecap="round" stroke-dasharray="0.1 3.4"/><path d="M14 10 L17.6 14.4 L20 9.2 Z" fill="#607d8b" stroke="#607d8b" stroke-width="0.8" stroke-linejoin="round"/></svg>';
 
     let sdk = null;
     let retour = null;            // {lon, lat, zoom} : la vue d'avant le premier saut
