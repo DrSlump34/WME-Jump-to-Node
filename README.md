@@ -11,7 +11,7 @@ KuniaKid, 07/05/2026). Le seul script qui le faisait
 ([439269](https://greasyfork.org/scripts/439269), 2022) s'appuie sur des API internes retirées
 depuis.
 
-![Le panneau du segment et la barre au survol](capture_0.06.00_survol.png)
+![Le panneau du segment et la barre au survol](capture_0.06.03_survol.png)
 
 ## Trois façons de s'en servir
 
@@ -54,4 +54,4 @@ version publiée, pour allumer une pastille rouge dans l'onglet Scripts quand un
 
 Depuis [GreasyFork](https://greasyfork.org/scripts/597298-wme-jump-to-node) (Tampermonkey ou Violentmonkey) : les mises à jour arrivent ensuite toutes seules. Discussion, retours et idées : [fil Discuss](https://www.waze.com/discuss/t/script-wme-jump-to-node/412995). Licence MIT.
 
-<img src="capture_0.06.00_onglet.png" width="260" alt="L'onglet Scripts : réglage et aide">
+<img src="capture_0.06.03_onglet.png" width="260" alt="L'onglet Scripts : réglage et aide">

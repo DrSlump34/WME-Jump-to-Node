@@ -1,4 +1,4 @@
-## 🎯 WME Jump to Node — v0.06.00 — [GreasyFork 🔗](https://greasyfork.org/en/scripts/597298-wme-jump-to-node) — [GitHub 🔗](https://github.com/DrSlump34/WME-Jump-to-Node)
+## 🎯 WME Jump to Node — v0.06.03 — [GreasyFork 🔗](https://greasyfork.org/en/scripts/597298-wme-jump-to-node) — [GitHub 🔗](https://github.com/DrSlump34/WME-Jump-to-Node)
 
 ![WME Jump to Node|256x256, 50%](https://raw.githubusercontent.com/DrSlump34/WME-Jump-to-Node/master/icon-256.png)
 
@@ -6,7 +6,7 @@
 
 **On a long segment, one end is often off screen.** To look at a node — turns, junction, restriction — you scroll the map by hand, then scroll back. This script takes you there in one click, and brings you back.
 
-![WME Jump to Node — segment panel and hover toolbar|1364x791, 50%](https://raw.githubusercontent.com/DrSlump34/WME-Jump-to-Node/master/capture_0.06.00_survol.png)
+![WME Jump to Node — segment panel and hover toolbar|1364x791, 50%](https://raw.githubusercontent.com/DrSlump34/WME-Jump-to-Node/master/capture_0.06.03_survol.png)
 
 **In the segment panel**, one line under the header: `NODE (A)(B) | (⛶)(◎) | (↩)   545 m`
 * **A · B** — centre the map on node A or node B of the selected segment. Zoom and selection are kept.
@@ -47,7 +47,7 @@ Feedback and ideas very welcome.
 
 **Clavier.** Cinq raccourcis sont listés **sans touches** dans Paramètres › Raccourcis clavier, pour n’en prendre aucune à un autre script. Attribuez-y ceux que vous voulez.
 
-![WME Jump to Node — onglet Scripts|318x873, 50%](https://raw.githubusercontent.com/DrSlump34/WME-Jump-to-Node/master/capture_0.06.00_onglet.png)
+![WME Jump to Node — onglet Scripts|318x869, 50%](https://raw.githubusercontent.com/DrSlump34/WME-Jump-to-Node/master/capture_0.06.03_onglet.png)
 
 **Langues :** anglais, français, allemand, espagnol, italien, portugais (BR/PT), hébreu. Suit la langue de WME.
 **Sûreté :** le script ne modifie jamais la carte — rien n’entre dans la pile d’annulation. Construit sur le SDK de WME. Sa seule requête hors de waze.com : au plus une fois par jour, le numéro de version publié sur GreasyFork, pour la pastille de mise à jour.
