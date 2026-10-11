@@ -202,7 +202,7 @@ const MOTS = new Set(('if else for while do return function const let var new ty
 const GLOBAUX = new Set(('window document navigator console localStorage setTimeout clearTimeout setInterval clearInterval ' +
     'requestAnimationFrame Math JSON Object Array Number String Boolean Map Set WeakMap Promise Intl MutationObserver ' +
     'Infinity NaN Date Error RegExp isNaN parseInt parseFloat encodeURIComponent decodeURIComponent atob btoa ' +
-    'GM_info GM_xmlhttpRequest unsafeWindow arguments fetch location URL Blob Audio Event CustomEvent getComputedStyle performance').split(' '));
+    'GM_info GM_xmlhttpRequest unsafeWindow arguments fetch location URL Blob Audio Event CustomEvent getComputedStyle performance crypto TextEncoder Uint8Array').split(' '));
 
 const absents = new Map();        // nom -> première ligne
 const ligneDe = (() => {

@@ -58,7 +58,8 @@ async function monter(segments, maj, stock = {}, touchesWme = {}) {
         setTimeout: () => 0, clearTimeout() { }, setInterval: () => 0, clearInterval() { }, Date: { now: () => horloge },
         localStorage: { getItem: k => ls.has(k) ? ls.get(k) : null, setItem: (k, v) => { ls.set(k, String(v)); } }, navigator: { language: 'fr' },
         MutationObserver: class { observe() { } }, GM_info: { script: { version: maj ? maj.installee : 'banc' } },
-        GM_xmlhttpRequest: o => { if (maj) o.onload(maj.reponse); },
+        // 0.06.07 : version-min.json est lu AVANT le démarrage ; « erreur réseau » = le script démarre.
+        GM_xmlhttpRequest: o => { if (/version-min\.json/.test(o.url)) { o.onerror && o.onerror(); return; } if (maj) o.onload(maj.reponse); },
         document: {
             documentElement: { lang: 'fr' }, head: el(), body: el(), createElement: el,
             querySelector: () => null, getElementById: id => id === 'wjn-sb-maj' ? pastille : null, addEventListener() { },
