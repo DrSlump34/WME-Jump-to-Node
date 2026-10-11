@@ -9,7 +9,7 @@
 // @name:he      WME Jump to Node
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyNCcgaGVpZ2h0PScyNCcgdmlld0JveD0nMCAwIDI0IDI0Jz48cGF0aCBkPSdNMyAxOC41IEgxNCcgc3Ryb2tlPScjNjA3ZDhiJyBzdHJva2Utd2lkdGg9JzIuNicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+PGNpcmNsZSBjeD0nMy41JyBjeT0nMTguNScgcj0nMi40JyBmaWxsPScjNjA3ZDhiJy8+PGNpcmNsZSBjeD0nMTcuNScgY3k9JzE4LjUnIHI9JzMuNicgZmlsbD0nI2ZiOGMwMCcgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzEuMicvPjxwYXRoIGQ9J000LjUgMTMgQzYuNSA0LjUgMTQuNSAzLjUgMTcgMTEnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzYwN2Q4Yicgc3Ryb2tlLXdpZHRoPScyJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1kYXNoYXJyYXk9JzAuMSAzLjQnLz48cGF0aCBkPSdNMTQgMTAgTDE3LjYgMTQuNCBMMjAgOS4yIFonIGZpbGw9JyM2MDdkOGInIHN0cm9rZT0nIzYwN2Q4Yicgc3Ryb2tlLXdpZHRoPScwLjgnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnLz48L3N2Zz4=
 // @namespace    https://github.com/DrSlump34
-// @version      0.06.07
+// @version      0.06.08
 // @description  Jump to either end of the selected segment, to its middle, or fit it on screen — from the segment panel, from a small toolbar that appears when you hover the selection, or by keyboard. A Back button returns you where you were.
 // @description:fr Sauter à l'une ou l'autre extrémité du segment sélectionné, à son milieu, ou l'afficher en entier — depuis le panneau du segment, depuis une petite barre qui apparaît au survol de la sélection, ou au clavier. Un bouton Revenir vous ramène d'où vous veniez.
 // @description:de Springen Sie zu einem Ende des ausgewählten Segments, zu seiner Mitte, oder zeigen Sie es ganz an — über den Segmentbereich, über eine kleine Leiste, die beim Überfahren der Auswahl erscheint, oder per Tastatur. Eine Zurück-Schaltfläche bringt Sie zurück.
@@ -1178,11 +1178,27 @@
         } catch (e) { res(null); }
     });
     const _vmHx = t => { let x = 0x811c9dc5; for (let i = 0; i < t.length; i++) { x ^= t.charCodeAt(i); x = Math.imul(x, 0x01000193) >>> 0; } return x >>> 0; };
+    // L'auteur essaie ses versions avant de les publier. ⚠️ Le contrôle tourne au DÉBUT du démarrage, souvent
+    // AVANT que WME ait chargé le profil : getUserInfo() rend alors un pseudo vide (mesuré le 11/10/2026 —
+    // une version non publiée bloquée chez l'auteur). On attend donc le pseudo jusqu'à 10 s, puis on essaie
+    // la session Discuss (même site, mêmes cookies).
     const _vmAuteur = async () => {
+        const estAuteur = n => !!n && _vmHx(String(n).toLowerCase()) === 0xc0bef069;
         try {
             const w = (typeof unsafeWindow !== 'undefined' && unsafeWindow.getWmeSdk) ? unsafeWindow : window;
-            const u = await w.getWmeSdk({ scriptId: 'wme-jump-to-node-vm', scriptName: String(SCRIPT_NAME) + ' (version)' }).State.getUserInfo();
-            return !!(u && u.userName) && _vmHx(String(u.userName).toLowerCase()) === 0xc0bef069;
+            const sdk = w.getWmeSdk({ scriptId: 'wme-jump-to-node-vm', scriptName: String(SCRIPT_NAME) + ' (version)' });
+            for (let i = 0; i < 20; i++) {
+                let u = null;
+                try { u = await sdk.State.getUserInfo(); } catch (e) { u = null; }
+                if (u && u.userName) return estAuteur(u.userName);
+                await new Promise(r => setTimeout(r, 500));
+            }
+        } catch (e) { /* SDK indisponible : on tente Discuss */ }
+        try {
+            const w = (typeof unsafeWindow !== 'undefined' && unsafeWindow.fetch) ? unsafeWindow : window;
+            const r = await w.fetch('/discuss/session/current.json', { credentials: 'same-origin' });
+            const j = r.ok ? await r.json() : null;
+            return estAuteur(j && j.current_user && j.current_user.username);
         } catch (e) { return false; }
     };
     const _vmEmpreinte = async src => {
