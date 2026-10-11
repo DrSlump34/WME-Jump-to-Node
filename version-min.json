@@ -1,4 +1,4 @@
 {
-  "min": "0.06.04",
+  "min": "0.06.05",
   "_lisezmoi": "Version minimale autorisée. Toute version plus ancienne refuse de démarrer et demande la mise à jour. À relever quand une faille est corrigée."
 }
