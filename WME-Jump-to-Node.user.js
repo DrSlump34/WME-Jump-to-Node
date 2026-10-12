@@ -9,7 +9,7 @@
 // @name:he      WME Jump to Node
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyNCcgaGVpZ2h0PScyNCcgdmlld0JveD0nMCAwIDI0IDI0Jz48cGF0aCBkPSdNMyAxOC41IEgxNCcgc3Ryb2tlPScjNjA3ZDhiJyBzdHJva2Utd2lkdGg9JzIuNicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+PGNpcmNsZSBjeD0nMy41JyBjeT0nMTguNScgcj0nMi40JyBmaWxsPScjNjA3ZDhiJy8+PGNpcmNsZSBjeD0nMTcuNScgY3k9JzE4LjUnIHI9JzMuNicgZmlsbD0nI2ZiOGMwMCcgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzEuMicvPjxwYXRoIGQ9J000LjUgMTMgQzYuNSA0LjUgMTQuNSAzLjUgMTcgMTEnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzYwN2Q4Yicgc3Ryb2tlLXdpZHRoPScyJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1kYXNoYXJyYXk9JzAuMSAzLjQnLz48cGF0aCBkPSdNMTQgMTAgTDE3LjYgMTQuNCBMMjAgOS4yIFonIGZpbGw9JyM2MDdkOGInIHN0cm9rZT0nIzYwN2Q4Yicgc3Ryb2tlLXdpZHRoPScwLjgnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnLz48L3N2Zz4=
 // @namespace    https://github.com/DrSlump34
-// @version      0.06.08
+// @version      0.06.09
 // @description  Jump to either end of the selected segment, to its middle, or fit it on screen — from the segment panel, from a small toolbar that appears when you hover the selection, or by keyboard. A Back button returns you where you were.
 // @description:fr Sauter à l'une ou l'autre extrémité du segment sélectionné, à son milieu, ou l'afficher en entier — depuis le panneau du segment, depuis une petite barre qui apparaît au survol de la sélection, ou au clavier. Un bouton Revenir vous ramène d'où vous veniez.
 // @description:de Springen Sie zu einem Ende des ausgewählten Segments, zu seiner Mitte, oder zeigen Sie es ganz an — über den Segmentbereich, über eine kleine Leiste, die beim Überfahren der Auswahl erscheint, oder per Tastatur. Eine Zurück-Schaltfläche bringt Sie zurück.
@@ -671,6 +671,14 @@
 #${POP_ID}[hidden] { display: none !important; }
 #${POP_ID} .wjn-len { margin-inline-start: 0; }
 /* Onglet Scripts — calqué sur #wct-sidebar */
+/* WME Studio, thème sombre : ses variables, toujours avec un repli. Sans Studio, ou en thème clair, ces règles ne s'appliquent pas. */
+html:is([data-wme-studio-theme="dark"],[data-wme-studio-theme="black"]) #wjn-sidebar { color: var(--wme-studio-text, #e8eaed); }
+html:is([data-wme-studio-theme="dark"],[data-wme-studio-theme="black"]) #wjn-sidebar :is(p,td,th,li,label,b,strong,bdi,dd,dt):not([class]) { color: inherit; }
+html:is([data-wme-studio-theme="dark"],[data-wme-studio-theme="black"]) #wjn-sidebar :is([class*="hint"],[class*="note"],[class*="-ver"],[class*="foot"],[class*="links"],[class*="meta"],[class*="-lbl"]) { color: var(--wme-studio-text-secondary, #b6c0ca); }
+html:is([data-wme-studio-theme="dark"],[data-wme-studio-theme="black"]) #wjn-sidebar :is(h2,[class*="-sec"]:not(button),[class*="sb-on"]) { color: #64b5f6; }
+html:is([data-wme-studio-theme="dark"],[data-wme-studio-theme="black"]) #wjn-sidebar :is([class*="btn-neutral"],[class*="btn-sec"],[class*="chip"],[class*="help-hdr"],[class*="aide-h"],[class*="hist-row"],kbd,select,input:not([type=checkbox]):not([type=radio])) { background: var(--wme-studio-input, #3a3f44); color: var(--wme-studio-text, #e8eaed); border-color: var(--wme-studio-border, #4a5056); }
+html:is([data-wme-studio-theme="dark"],[data-wme-studio-theme="black"]) #wjn-sidebar :is([class*="help-hdr"],[class*="aide-h"]).on { background: var(--wme-studio-hover, #454b52); color: var(--wme-studio-text, #e8eaed); }
+html:is([data-wme-studio-theme="dark"],[data-wme-studio-theme="black"]) #wjn-sidebar :is([class*="help-body"],[class*="aide-c"]) { color: var(--wme-studio-text, #e8eaed); }
 #wjn-sidebar { padding: 10px 12px; font-family: 'Rubik','Open Sans',sans-serif; font-size: 12px; color: var(--wjn-text); }
 #wjn-sidebar h2 { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--wjn-blue); margin: 0 0 8px; }
 #wjn-sidebar h2 .wjn-sb-ico { display: inline-flex; }
