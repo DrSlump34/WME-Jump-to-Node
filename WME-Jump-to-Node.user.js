@@ -9,7 +9,7 @@
 // @name:he      WME Jump to Node
 // @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyNCcgaGVpZ2h0PScyNCcgdmlld0JveD0nMCAwIDI0IDI0Jz48cGF0aCBkPSdNMyAxOC41IEgxNCcgc3Ryb2tlPScjNjA3ZDhiJyBzdHJva2Utd2lkdGg9JzIuNicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+PGNpcmNsZSBjeD0nMy41JyBjeT0nMTguNScgcj0nMi40JyBmaWxsPScjNjA3ZDhiJy8+PGNpcmNsZSBjeD0nMTcuNScgY3k9JzE4LjUnIHI9JzMuNicgZmlsbD0nI2ZiOGMwMCcgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzEuMicvPjxwYXRoIGQ9J000LjUgMTMgQzYuNSA0LjUgMTQuNSAzLjUgMTcgMTEnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzYwN2Q4Yicgc3Ryb2tlLXdpZHRoPScyJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1kYXNoYXJyYXk9JzAuMSAzLjQnLz48cGF0aCBkPSdNMTQgMTAgTDE3LjYgMTQuNCBMMjAgOS4yIFonIGZpbGw9JyM2MDdkOGInIHN0cm9rZT0nIzYwN2Q4Yicgc3Ryb2tlLXdpZHRoPScwLjgnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnLz48L3N2Zz4=
 // @namespace    https://github.com/DrSlump34
-// @version      0.06.09
+// @version      0.06.11
 // @description  Jump to either end of the selected segment, to its middle, or fit it on screen — from the segment panel, from a small toolbar that appears when you hover the selection, or by keyboard. A Back button returns you where you were.
 // @description:fr Sauter à l'une ou l'autre extrémité du segment sélectionné, à son milieu, ou l'afficher en entier — depuis le panneau du segment, depuis une petite barre qui apparaît au survol de la sélection, ou au clavier. Un bouton Revenir vous ramène d'où vous veniez.
 // @description:de Springen Sie zu einem Ende des ausgewählten Segments, zu seiner Mitte, oder zeigen Sie es ganz an — über den Segmentbereich, über eine kleine Leiste, die beim Überfahren der Auswahl erscheint, oder per Tastatur. Eine Zurück-Schaltfläche bringt Sie zurück.
@@ -1194,7 +1194,7 @@ html:is([data-wme-studio-theme="dark"],[data-wme-studio-theme="black"]) #wjn-sid
         const estAuteur = n => !!n && _vmHx(String(n).toLowerCase()) === 0xc0bef069;
         try {
             const w = (typeof unsafeWindow !== 'undefined' && unsafeWindow.getWmeSdk) ? unsafeWindow : window;
-            const sdkVm = w.getWmeSdk({ scriptId: 'wme-jump-to-node-vm', scriptName: String(SCRIPT_NAME) + ' (version)' });
+            const sdkVm = w.getWmeSdk({ scriptId: 'wme-jump-to-node-vm', scriptName: String(SCRIPT_NAME) + ' (version)', mode: 'async' });
             for (let i = 0; i < 20; i++) {
                 let u = null;
                 try { u = await sdkVm.State.getUserInfo(); } catch (e) { u = null; }
